@@ -5,13 +5,17 @@
 #   gem 'sqlite3'
 #
 default: &default
-  adapter: sqlite3
+  adapter: mysql2
+  encoding: utf8
   pool: 5
-  timeout: 5000
+  username: root
+  password: rrrr0611 # docker-compose.ymlのMYSQL_ROOT_PASSWORD
+  host: 172.17.0.2       # docker-compose.ymlのサービス名
+  database: mitotte
 
 development:
   <<: *default
-  database: db/development.sqlite3
+  database: mitotte
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
