@@ -1,7 +1,7 @@
 class Api::V1::ScreenshotsController < ApplicationController
   protect_from_forgery except: :create
   def create
-    file = fileupload_params[:file]
+    file = fileupload_params[:screenshot]
     image = file.read
     src = Digest::MD5.hexdigest(image)
     extension = File.extname(file.original_filename).strip.downcase[1..-1]
@@ -23,6 +23,6 @@ class Api::V1::ScreenshotsController < ApplicationController
   private
 
   def fileupload_params
-    params.require(:screenshot).permit(:uuid, :file)
+    params.permit(:uuid, :screenshot)
   end
 end
