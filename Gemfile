@@ -31,6 +31,8 @@ gem 'jbuilder', '~> 2.5'
 
 # Devise
 gem 'devise'
+# Dotenv for using environment valiables.
+gem 'dotenv-rails'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
