@@ -1,0 +1,19 @@
+<% @screenshots.each do |screenshot| %>
+<img src="/images/screenshots/<%= screenshot.name %>" width="400px"><br>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>screenshot ID</th>
+        <th>type</th>
+        <th>response</th>
+    </tr>
+    <% screenshot.detections.each do |detection| %>
+    <tr>
+        <td><%= detection.id %></td>
+        <td><%= screenshot.id %></td>
+        <td><%= detection.mode %></td>
+        <td><%= detection.data %></td>
+    </tr>
+    <% end %>
+</table>
+<% end %>
