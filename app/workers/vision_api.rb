@@ -28,11 +28,28 @@ class VisionApi
     request = Net::HTTP::Post.new(uri.request_uri)
     request["Content-Type"] = "application/json"
     response = https.request(request, body)
-
-    response_model = Detection.new(:screenshot_id => screenshot_id, :mode => type, :data => response.body)
-    response_model.save
+    response.body = response.body.force_encoding("utf-8")
 
     logger = Logger.new(File.join(Rails.root, 'log', 'resque.log'))
-    logger.info response.body
+    logger.info response.body.class
+
+    detection = Detection.new(:screenshot_id => screenshot_id, :mode => type, :data => response.body, :keywords => '{}')
+
+    detection.keywords =
+      case type
+      when "LOGO_DETECTION"
+        JSON.parse(response.body)['responses'][0]['logoAnnotations'].map { |d| d['description'] }
+      when "LABEL_DETECTION"
+        JSON.parse(response.body)['responses'][0]['labelAnnotations'].map { |d| d['description'] }
+      when "TEXT_DETECTION"
+        JSON.parse(response.body)['responses'][0]['textAnnotations'].map { |d| d['description'] }
+      when "SAFE_SEARCH_DETECTION"
+        JSON.parse(response.body)['responses'][0]['safeSearchAnnotation']
+      else
+        '{}'
+      end
+
+    detection.save
+
   end
 end
