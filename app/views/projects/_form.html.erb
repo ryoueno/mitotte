@@ -27,12 +27,12 @@
 
   <div class="field">
     <%= f.label :start_at %>
-    <%= f.datetime_select :start_at %>
+    <%= f.date_field :start_at, min: Date.today %>
   </div>
 
   <div class="field">
     <%= f.label :end_at %>
-    <%= f.datetime_select :end_at %>
+    <%= f.date_field :end_at, min: Date.today %>
   </div>
 
   <div class="actions">
