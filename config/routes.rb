@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  resources :projects
+  resources :projects, shallow: true do
+    resources :tasks
+  end
+
   get 'pages/index'
 
   devise_for :users
