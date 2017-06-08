@@ -1,0 +1,26 @@
+<%= form_for(task, url: polymorphic_path([project, task])) do |f| %>
+  <% if task.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(task.errors.count, "error") %> prohibited this task from being saved:</h2>
+
+      <ul>
+      <% task.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <% @tasks.each_with_index do |t, i| %>
+      <%= fields_for("tasks[#{i}]", t) do |g| %>
+        <%= g.label :subject %>
+        <%= g.text_field :subject %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
