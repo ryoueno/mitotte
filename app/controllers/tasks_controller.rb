@@ -1,5 +1,6 @@
 class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
+  MAX_TASK_ROW = 10
 
   # GET /tasks
   # GET /tasks.json
@@ -17,6 +18,7 @@ class TasksController < ApplicationController
   def new
     @project = Project.where(:id => params[:project_id], :user_id => current_user.id).first
     @task = @project.tasks.build
+    @tasks = @project.tasks.build(Array.new(MAX_TASK_ROW, {}))
   end
 
   # GET /tasks/1/edit
@@ -28,16 +30,15 @@ class TasksController < ApplicationController
   # POST /tasks.json
   def create
     @project = Project.where(:id => params[:project_id], :user_id => current_user.id).first
-    @task = @project.tasks.build(task_params)
+    task_params.each_value do |t|
+      next if t[:subject].empty?
+      @task = @project.tasks.build({:subject => t[:subject]})
+      @res = @task.save
+    end
 
     respond_to do |format|
-      if @task.save
-        format.html { redirect_to @task, notice: 'Task was successfully created.' }
-        format.json { render :show, status: :created, location: @task }
-      else
-        format.html { render :new }
-        format.json { render json: @task.errors, status: :unprocessable_entity }
-      end
+      format.html { redirect_to @task, notice: 'Task was successfully created.' }
+      format.json { render :show, status: :created, location: @task }
     end
   end
 
@@ -73,6 +74,6 @@ class TasksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def task_params
-      params.require(:task).permit(:subject, :description)
+      params.require(:tasks)
     end
 end
