@@ -4,7 +4,7 @@ class TasksController < ApplicationController
   # GET /tasks
   # GET /tasks.json
   def index
-    @project = Project.find(params[:project_id])
+    @project = Project.where(:id => params[:project_id], :user_id => current_user.id).first
     @tasks = @project.tasks.all
   end
 
@@ -15,7 +15,7 @@ class TasksController < ApplicationController
 
   # GET /tasks/new
   def new
-    @project = Project.find(params[:project_id])
+    @project = Project.where(:id => params[:project_id], :user_id => current_user.id).first
     @task = @project.tasks.build
   end
 
@@ -27,7 +27,7 @@ class TasksController < ApplicationController
   # POST /tasks
   # POST /tasks.json
   def create
-    @project = Project.find(params[:project_id])
+    @project = Project.where(:id => params[:project_id], :user_id => current_user.id).first
     @task = @project.tasks.build(task_params)
 
     respond_to do |format|
