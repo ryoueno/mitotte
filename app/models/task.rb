@@ -1,4 +1,4 @@
 class Task < ApplicationRecord
   belongs_to :project
-  has_many :schedule
+  has_many :schedules
 end

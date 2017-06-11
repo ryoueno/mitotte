@@ -16,6 +16,12 @@
       <%= fields_for("tasks[#{i}]", t) do |g| %>
         <%= g.label :subject %>
         <%= g.text_field :subject %>
+        <% t.schedules.each_with_index do |s, j| %>
+          <%= fields_for("tasks[#{i}][schedules][#{j}]") do |g| %>
+            <%= g.hidden_field :date, :value => s.date %>
+            <%= g.check_box :enabled %>
+          <% end %>
+        <% end %>
       <% end %>
     <% end %>
   </div>
