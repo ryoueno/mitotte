@@ -3,19 +3,13 @@
   <head>
     <title>App</title>
     <%= csrf_meta_tags %>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
-    <% if user_signed_in? %>
-      <p><%= link_to "ログアウト", destroy_user_session_path, method: :delete %></p>
-    <% end %>
-    <% if notice %>
-      <p class="notice"><%= notice %></p>
-    <% elsif alert %>
-      <p class="alert"><%= alert %></p>
-    <% end %>
     <%= yield %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </body>
