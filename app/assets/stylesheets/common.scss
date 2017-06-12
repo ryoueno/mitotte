@@ -1,0 +1,18 @@
+@import "materialize/components/color";
+$primary-color: color("materialize-red", "accent-2") !default;
+$secondary-color: color("lime", "accent-3") !default;
+@import 'materialize';
+.side-nav {
+  .collapsible-header, .collapsible li a{
+    margin: 0;
+    &:hover {
+      @extend .lime, .lighten-5;
+    }
+    &.active {
+      @extend .lime, .accent-1;
+    }
+  }
+  .collapsible a {
+    margin: 0 !important;
+  }
+}
