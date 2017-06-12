@@ -12,7 +12,9 @@ $secondary-color: color("lime", "accent-3") !default;
       @extend .lime, .accent-1;
     }
   }
-  .collapsible a {
-    margin: 0 !important;
+  .collapsible {
+    a {
+      margin: 0 !important;
+    }
   }
 }
