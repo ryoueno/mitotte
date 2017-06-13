@@ -10,7 +10,7 @@
             <div class="collapsible-body">
                 <div class="row">
                     <div class="col s12 m12">
-                        <ul class="collapsible">
+                        <ul>
                             <% if user_signed_in? %>
                             <li>
                                 <%= link_to destroy_user_session_path, method: :delete do %>
@@ -30,7 +30,7 @@
             <div class="collapsible-body">
                 <div class="row">
                     <div class="col s12 m12">
-                        <ul class="collapsible">
+                        <ul>
                             <li>
                                 <%= link_to projects_path do %>
                                     <i class="material-icons">view_list</i>全てのプロジェクト
