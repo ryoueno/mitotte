@@ -1,0 +1,59 @@
+<%= form_for(task, url: polymorphic_path([project, task])) do |f| %>
+  <% if task.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(task.errors.count, "error") %> prohibited this task from being saved:</h2>
+
+      <ul>
+      <% task.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <table class="centered">
+      <thead>
+        <tr>
+            <th>内容</th>
+            <th>日付</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @tasks.each_with_index do |t, i| %>
+        <tr>
+          <%= fields_for("tasks[#{i}]", t) do |g| %>
+            <td>
+              <%= g.label :subject %>
+              <%= g.text_field :subject %>
+            </td>
+            <td style="text-align: left; padding: 10px 20px;">
+            <% t.schedules.each_with_index do |s, j| %>
+              <%= fields_for("tasks[#{i}][schedules][#{j}]") do |g| %>
+                <ul class="vertical-box">
+                  <li class="lime-text text-darken-1" style="padding-right:15px"><%= s.date.strftime("%-m/%-d") %></li>
+                  <li>
+                  <%= g.hidden_field :date, :value => s.date %>
+                  <%= g.check_box :enabled %>
+                  <%= g.label :enabled, "" do %>
+                  <% end %>
+                  </li>
+                </ul>
+              <% end %>
+            <% end %>
+            </td>
+          <% end %>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+  </div>
+
+  <div class="row">
+    <div class="input-field col s12 center">
+      <%= f.submit "登録", :class => "waves-effect waves-light btn-large" %>
+    </div>
+  </div>
+<% end %>

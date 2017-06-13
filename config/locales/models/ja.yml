@@ -1,0 +1,14 @@
+ja:
+  activerecord:
+    models:
+      project: プロジェクト
+    attributes:
+      project:
+        id: ID
+        user_id: ユーザID
+        subject: プロジェクト名
+        description: 概要
+        start_at: 開始日
+        end_at: 終了日
+        created_at: 登録日時
+        updated_at: 更新日時

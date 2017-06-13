@@ -1,0 +1,52 @@
+<div class="side-nav fixed col m4 l3 z-depth-3">
+    <%= link_to root_path do %>
+        <h4 class="center-align lime-text text-darken-1">Mitotte</h4>
+    <% end %>
+    <ul class="collapsible" data-collapsible="expandable">
+        <li>
+            <div class="collapsible-header">
+                <i class="material-icons">perm_identity</i>アカウント
+            </div>
+            <div class="collapsible-body">
+                <div class="row">
+                    <div class="col s12 m12">
+                        <ul class="collapsible">
+                            <% if user_signed_in? %>
+                            <li>
+                                <%= link_to destroy_user_session_path, method: :delete do %>
+                                    <i class="material-icons">launch</i>ログアウト
+                                <% end %>
+                            </li>
+                            <% end %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="collapsible-header">
+                <i class="material-icons">library_books</i>プロジェクト
+            </div>
+            <div class="collapsible-body">
+                <div class="row">
+                    <div class="col s12 m12">
+                        <ul class="collapsible">
+                            <li>
+                                <%= link_to projects_path do %>
+                                    <i class="material-icons">view_list</i>全てのプロジェクト
+                                <% end %>
+                            </li>
+                            <% current_user.projects.each do |project| %>
+                            <li>
+                                <%= link_to project do %>
+                                    <i class="material-icons">label_outline</i><%= project.subject.truncate(14) %>
+                                <% end %>
+                            </li>
+                            <% end %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>

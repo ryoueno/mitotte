@@ -1,0 +1,12 @@
+<% content_for :sidebar do %>
+  <%= render 'shared/side' %>
+<% end %>
+
+<main>
+  <h4>タスクを作成</h4>
+
+  <%= render 'form_with_schedule', project: @project, task: @task, tasks: @tasks %>
+
+  <%= link_to 'Back', project_tasks_path %>
+
+</main>
