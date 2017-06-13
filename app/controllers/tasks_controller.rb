@@ -42,7 +42,7 @@ class TasksController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_to @task, notice: 'Task was successfully created.' }
+      format.html { redirect_to @project, notice: 'Task was successfully created.' }
       format.json { render :show, status: :created, location: @task }
     end
   end
@@ -52,7 +52,7 @@ class TasksController < ApplicationController
   def update
     respond_to do |format|
       if @task.update(task_params)
-        format.html { redirect_to @task, notice: 'Task was successfully updated.' }
+        format.html { redirect_to @project, notice: 'Task was successfully updated.' }
         format.json { render :show, status: :ok, location: @task }
       else
         format.html { render :edit }
