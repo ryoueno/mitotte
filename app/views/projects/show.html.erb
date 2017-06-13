@@ -2,31 +2,63 @@
   <%= render 'shared/side' %>
 <% end %>
 <main>
-  <p>
-    <strong>User:</strong>
-    <%= @project.user_id %>
-  </p>
+  <h4><%= @project.subject %></h4>
+  <p class="lime-text text-darken-1"><%= @project.description %></p>
 
-  <p>
-    <strong>Subject:</strong>
-    <%= @project.subject %>
-  </p>
+  <div class="row">
+    <table class="project-detail-table">
+      <tr>
+        <td rowspan="3">
+          <table class="project-detail-table-inner">
+            <tr>
+              <th class="lime-text text-darken-1 icon"><i class="material-icons">schedule</i></th>
+              <th class="lime-text text-darken-1">開始日</th>
+              <td><%= @project.start_at.strftime("%Y年%m月%d日") %></td>
+            </tr>
+            <tr>
+              <th class="lime-text text-darken-1 icon"><i class="material-icons">schedule</i></th>
+              <th class="lime-text text-darken-1">終了日</th>
+              <td><%= @project.end_at.strftime("%Y年%m月%d日") %></td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <h5>全てのタスク数</h5>
+          <span class="lime-text text-darken-1">12</span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h5>残りのタスク数</h5>
+          <span class="lime-text text-darken-1">8</span>
+        </td>
+      </tr>
+    </table>
+  </div>
 
-  <p>
-    <strong>Description:</strong>
-    <%= @project.description %>
-  </p>
+  <div class="row">
+    <h5>タスク一覧</h5>
+      <table class="highlight">
+        <thead>
+          <tr>
+              <th>日付</th>
+              <th>内容</th>
+          </tr>
+        </thead>
 
-  <p>
-    <strong>Start at:</strong>
-    <%= @project.start_at %>
-  </p>
-
-  <p>
-    <strong>End at:</strong>
-    <%= @project.end_at %>
-  </p>
-
-  <%= link_to 'Edit', edit_project_path(@project) %> |
-  <%= link_to 'Back', projects_path %>
+        <tbody>
+          <% @tasks.each do |task| %>
+          <tr>
+            <td><%= task.date %></td>
+            <td><%= task.task.subject %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+  </div>
+  <div class="row right-align">
+  <%= link_to new_project_task_path(@project.id), :class => "btn-floating btn-large waves-effect waves-light" do %>
+    <i class="material-icons">add</i>
+  <% end %>
+  </div>
 </main>

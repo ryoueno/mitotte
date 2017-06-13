@@ -14,6 +14,7 @@ class ProjectsController < ApplicationController
   # GET /projects/1
   # GET /projects/1.json
   def show
+    @tasks = Schedule.joins(:task).order(:date).where({"tasks.project_id" => @project.id})
   end
 
   # GET /projects/new
