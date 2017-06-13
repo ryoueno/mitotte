@@ -1,4 +1,8 @@
-<h1>Projects</h1>
+<% content_for :sidebar do %>
+  <%= render 'shared/side' %>
+<% end %>
+<main>
+<h4>プロジェクト</h4>
 
 <table>
   <thead>
@@ -28,6 +32,9 @@
   </tbody>
 </table>
 
-<br>
-
-<%= link_to 'New Project', new_project_path %>
+<div class="row right-align">
+  <%= link_to new_project_path, :class => "btn-floating btn-large waves-effect waves-light" do %>
+    <i class="material-icons">add</i>
+  <% end %>
+</div>
+</main>

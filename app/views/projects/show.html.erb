@@ -1,27 +1,32 @@
-<p>
-  <strong>User:</strong>
-  <%= @project.user_id %>
-</p>
+<% content_for :sidebar do %>
+  <%= render 'shared/side' %>
+<% end %>
+<main>
+  <p>
+    <strong>User:</strong>
+    <%= @project.user_id %>
+  </p>
 
-<p>
-  <strong>Subject:</strong>
-  <%= @project.subject %>
-</p>
+  <p>
+    <strong>Subject:</strong>
+    <%= @project.subject %>
+  </p>
 
-<p>
-  <strong>Description:</strong>
-  <%= @project.description %>
-</p>
+  <p>
+    <strong>Description:</strong>
+    <%= @project.description %>
+  </p>
 
-<p>
-  <strong>Start at:</strong>
-  <%= @project.start_at %>
-</p>
+  <p>
+    <strong>Start at:</strong>
+    <%= @project.start_at %>
+  </p>
 
-<p>
-  <strong>End at:</strong>
-  <%= @project.end_at %>
-</p>
+  <p>
+    <strong>End at:</strong>
+    <%= @project.end_at %>
+  </p>
 
-<%= link_to 'Edit', edit_project_path(@project) %> |
-<%= link_to 'Back', projects_path %>
+  <%= link_to 'Edit', edit_project_path(@project) %> |
+  <%= link_to 'Back', projects_path %>
+</main>
