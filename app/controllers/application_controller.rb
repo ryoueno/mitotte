@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
-  before_action :set_uuid
+  before_action :set_uuid, :set_projects
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :check_uuid, if: :devise_controller?, only: [:new]
 
@@ -21,5 +21,9 @@ class ApplicationController < ActionController::Base
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :uuid])
+  end
+
+  def set_projects
+    current_user.projects = Project.where(:user_id => current_user.id) if current_user
   end
 end

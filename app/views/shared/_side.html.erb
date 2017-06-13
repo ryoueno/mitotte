@@ -24,27 +24,29 @@
             </div>
         </li>
         <li>
-            <%= link_to projects_path, class: "no-padding" do %>
-                <div class="collapsible-header">
-                    <i class="material-icons">library_books</i>プロジェクト
-                </div>
-                <div class="collapsible-body">
-                                    <div class="row">
+            <div class="collapsible-header">
+                <i class="material-icons">library_books</i>プロジェクト
+            </div>
+            <div class="collapsible-body">
+                <div class="row">
                     <div class="col s12 m12">
                         <ul class="collapsible">
-                            <% if user_signed_in? %>
                             <li>
-                                <%= link_to destroy_user_session_path, method: :delete do %>
-                                    <i class="material-icons">launch</i>ログアウト
+                                <%= link_to projects_path do %>
+                                    <i class="material-icons">view_list</i>全てのプロジェクト
+                                <% end %>
+                            </li>
+                            <% current_user.projects.each do |project| %>
+                            <li>
+                                <%= link_to project do %>
+                                    <i class="material-icons">label_outline</i><%= project.subject.truncate(14) %>
                                 <% end %>
                             </li>
                             <% end %>
                         </ul>
                     </div>
                 </div>
-                </div>
             </div>
-            <% end %>
         </li>
     </ul>
 </div>
