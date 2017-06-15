@@ -1,3 +1,30 @@
 <% content_for :sidebar do %>
   <%= render 'shared/side' %>
 <% end %>
+
+<main>
+  <div class="row">
+    <h5>本日のタスク</h5>
+      <table class="highlight">
+        <thead>
+          <tr>
+              <th>プロジェクト名</th>
+              <th>内容</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @schedules.each do |s| %>
+          <tr onclick="location.href='<%= task_path s.task_id %>'">
+            <td>
+              <%= s.task.project.subject %>
+            </td>
+            <td>
+              <%= s.task.subject %>
+            </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+  </div>
+</main>
