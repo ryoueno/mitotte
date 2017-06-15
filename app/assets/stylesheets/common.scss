@@ -25,3 +25,7 @@ main {
 table.highlight > tbody > tr:hover {
   @extend .lime, .lighten-5;
 }
+
+.no-margin {
+  margin: 0px;
+}
