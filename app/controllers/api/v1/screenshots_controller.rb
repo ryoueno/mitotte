@@ -11,7 +11,10 @@ class Api::V1::ScreenshotsController < ApplicationController
       fp.write image
     end
 
-    @screenshot = Screenshot.new(:uuid => fileupload_params[:uuid], :src => src, :extension => extension)
+    uuid = fileupload_params[:uuid]
+    uuid = "MISSING_UUID_USER" if fileupload_params[:uuid].nil?
+
+    @screenshot = Screenshot.new(:uuid => uuid, :src => src, :extension => extension)
 
     if @screenshot.save
       # Create job detect information from screenshot by using Cloud Vision API.
