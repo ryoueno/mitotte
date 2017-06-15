@@ -38,6 +38,8 @@ gem 'materialize-sass'
 gem 'devise'
 # Dotenv for using environment valiables.
 gem 'dotenv-rails'
+# For using valiables in JavaScropt.
+gem 'gon'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
