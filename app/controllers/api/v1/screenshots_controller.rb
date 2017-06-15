@@ -1,3 +1,6 @@
+require 'json'
+require 'net/https'
+
 class Api::V1::ScreenshotsController < ApplicationController
   protect_from_forgery except: :create
   def create
@@ -11,7 +14,10 @@ class Api::V1::ScreenshotsController < ApplicationController
       fp.write image
     end
 
-    @screenshot = Screenshot.new(:uuid => fileupload_params[:uuid], :src => src, :extension => extension)
+    uuid = fileupload_params[:uuid]
+    uuid = "MISSING_UUID_USER" if fileupload_params[:uuid].nil?
+
+    @screenshot = Screenshot.new(:uuid => uuid, :src => src, :extension => extension)
 
     if @screenshot.save
       # Create job detect information from screenshot by using Cloud Vision API.
@@ -24,6 +30,8 @@ class Api::V1::ScreenshotsController < ApplicationController
         Resque.enqueue(VisionApi, url, type, @screenshot.id, @screenshot.path)
       end
 
+      set_firebase uuid
+
       render json: @screenshot, status: :created
     else
       render json: @screenshot.errors, status: :unprocessable_entity
@@ -34,5 +42,21 @@ class Api::V1::ScreenshotsController < ApplicationController
 
   def fileupload_params
     params.permit(:uuid, :screenshot)
+  end
+
+  def set_firebase(uuid)
+    key = "activity/#{uuid}"
+
+    body = {
+      time: Time.now.strftime("%Y-%m-%d %H:%M:%S"),
+    }.to_json
+
+    uri = URI.parse("#{ENV['GOOGLE_FIREBASE_URL']}#{key}.json")
+
+    https = Net::HTTP.new(uri.host, uri.port)
+    https.use_ssl = true
+    request = Net::HTTP::Post.new(uri.request_uri)
+    request["Content-Type"] = "application/json"
+    response = https.request(request, body)
   end
 end
