@@ -48,9 +48,18 @@
 
         <tbody>
           <% @tasks.each do |task| %>
-          <tr>
-            <td><%= task.date %></td>
-            <td><%= task.task.subject %></td>
+          <tr onclick="location.href='<%= task_path task.task_id %>'">
+            <td style="position: relative">
+              <% if task.date.today? %>
+                <span class="new badge" data-badge-caption="Today" style="left: 130px; right: auto;"></span>
+              <% elsif task.date < Date.today %>
+                <span class="new badge light-blue accent-2" data-badge-caption="Past" style="left: 130px; right: auto;"></span>
+              <% end %>
+              <%= task.date.strftime("%Y年%m月%d日") %>
+            </td>
+            <td>
+              <%= task.task.subject %>
+            </td>
           </tr>
           <% end %>
         </tbody>

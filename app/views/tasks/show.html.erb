@@ -1,12 +1,52 @@
-<p>
-  <strong>Subject:</strong>
-  <%= @task.subject %>
-</p>
+<% content_for :sidebar do %>
+  <%= render 'shared/side' %>
+<% end %>
+<main>
 
-<p>
-  <strong>Description:</strong>
-  <%= @task.description %>
-</p>
+  <p class="lime-text text-darken-1"><%= @task.project.subject %></p>
+  <h4><%= @task.subject %></h4>
+  <p class="lime-text text-darken-1"><%= @task.description %></p>
 
-<%= link_to 'Edit', edit_task_path(@task) %> |
-<%= link_to 'Back', project_tasks_path(@task.project) %>
+  <div class="row">
+    <table class="project-detail-table">
+      <tr>
+        <td rowspan="3">
+          <table class="project-detail-table-inner">
+            <tr>
+              <th class="lime-text text-darken-1 icon" style="vertical-align: top; padding-top: 10px"><i class="material-icons">schedule</i></th>
+              <th class="lime-text text-darken-1" style="vertical-align: top; width: 90px">作業予定日</th>
+              <td>
+                <ul class="no-margin date-list">
+                  <% @task.schedules.each do |s| %>
+                    <li class="left-align" style="position: relative">
+                      <% if s.date.today? %>
+                        <span class="new badge" data-badge-caption="Today" style="left: 78px; right: auto;"></span>
+                      <% elsif s.date < Date.today %>
+                        <span class="new badge light-blue accent-2" data-badge-caption="Past" style="left: 78px; right: auto;"></span>
+                      <% end %>
+                      <%= s.date.strftime("%-m月%-d日") %>
+                    </li>
+                  <% end %>
+                </ul>
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <h5>全てのタスク数</h5>
+          <span class="lime-text text-darken-1">12</span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h5>残りのタスク数</h5>
+          <span class="lime-text text-darken-1">8</span>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <%= link_to 'Edit', edit_task_path(@task) %> |
+  <%= link_to 'Back', project_tasks_path(@task.project) %>
+
+</main>

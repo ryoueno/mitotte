@@ -1,12 +1,12 @@
 class TasksController < ApplicationController
   before_action :set_task, only: [:show, :edit, :update, :destroy]
+  before_action :set_project, only: [:index, :show, :new, :create]
   MAX_TASK_ROW = 10
 
   # GET /tasks
   # GET /tasks.json
   def index
-    @project = Project.where(:id => params[:project_id], :user_id => current_user.id).first
-    @tasks = @project.tasks.all
+    redirect_to @project
   end
 
   # GET /tasks/1
@@ -16,7 +16,6 @@ class TasksController < ApplicationController
 
   # GET /tasks/new
   def new
-    @project = Project.where(:id => params[:project_id], :user_id => current_user.id).first
     @task = @project.tasks.build
     @tasks = @project.tasks.build(Array.new(MAX_TASK_ROW, {}))
     divided_days = divide_schedule_date @project
@@ -75,6 +74,10 @@ class TasksController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_task
       @task = Task.find(params[:id])
+    end
+
+    def set_project
+      @project = Project.where(:id => params[:project_id], :user_id => current_user.id).first
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
