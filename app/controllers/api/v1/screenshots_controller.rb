@@ -55,7 +55,7 @@ class Api::V1::ScreenshotsController < ApplicationController
 
     https = Net::HTTP.new(uri.host, uri.port)
     https.use_ssl = true
-    request = Net::HTTP::Post.new(uri.request_uri)
+    request = Net::HTTP::Patch.new(uri.request_uri)
     request["Content-Type"] = "application/json"
     response = https.request(request, body)
   end
