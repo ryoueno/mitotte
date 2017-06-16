@@ -2,16 +2,13 @@ firebase.initializeApp(gon.config);
 
 var starCountRef = firebase.database().ref(gon.key);
 starCountRef.on('value', function(activities) {
-  activities = activities.val();
-  for (let id in activities) {
-    // TODO: Get user state.
-    syncActivity("DO SOMETHING.", activities[id])
-  }
+  // TODO: Get user state.
+  syncActivity("DO SOMETHING.", activities.val())
 });
 
 function setActivity(activities) {
   msg_area = document.getElementById("fb-activity");
-  msg_area.innerHTML = "<h3>" + activities.behavior + "</h3>";
+  msg_area.innerHTML = "<h3>" + activities.behavior + activities.created_at + "</h3>";
 }
 
 function syncActivity(behavior, activity) {
