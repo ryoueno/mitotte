@@ -30,13 +30,14 @@ class TasksController < ApplicationController
   # POST /tasks
   # POST /tasks.json
   def create
+    default_schedule_time = [{'08:00' => '21:00'}]
     @project = Project.where(:id => params[:project_id], :user_id => current_user.id).first
     task_params.each_value do |t|
       next if t[:subject].empty? or t[:schedules].nil?
       @task = @project.tasks.build({:subject => t[:subject]})
       @res = @task.save
       @schedule = t[:schedules].each_value do |s|
-        @task.schedules.create(:date => s[:date]) if s[:enabled] == "1"
+        @task.schedules.create(:date => s[:date], :time => default_schedule_time) if s[:enabled] == "1"
       end
     end
 
