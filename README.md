@@ -1,24 +1,21 @@
-# README
+# Mitotte
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## サービス概要
+ユーザのタスクを管理・共有するサービス.
 
-Things you may want to cover:
+## 機能
+* タスク及び達成目標をプロジェクトにまとめ、内容やスケジュールを登録・管理する
+* ユーザのタスクの進捗を管理し、作業状況を自動で記録する
+* 作業の記録及び目標に対する進捗状況の記録を他のユーザに共有する
 
-* Ruby version
+## システム構成図
 
-* System dependencies
+![システム構成図](https://user-images.githubusercontent.com/15713787/27513333-340b559a-599d-11e7-9588-afc29e23ec11.png)
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## サービスの流れ
+1. プロジェクトを作成し、タスクを分割、目標とスケジュールを作成する
+2. バックグラウンドでユーザの作業状況を監視、リアルタイムで画面キャプチャを保存する
+3. 画面キャプチャを解析し、ユーザの作業状況を把握する
+4. ユーザはアプリケーションを起動させながら作業を行い、作業状況を記録する
+5. 画面キャプチャの解析、ユーザの記録及び目標をもとに、作業の記録としてまとめる
+6. 作業の記録を共有する

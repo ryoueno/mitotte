@@ -17,4 +17,7 @@ Rails.application.routes.draw do
 
   # Screenshot
   post '/api/v1/screenshots' => 'api/v1/screenshots#create'
+
+  # Activity
+  post '/api/v1/activities' => 'api/v1/activities#create'
 end
