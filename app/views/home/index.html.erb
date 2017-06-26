@@ -9,6 +9,7 @@
       <table class="highlight">
         <thead>
           <tr>
+              <th></th>
               <th>プロジェクト名</th>
               <th>内容</th>
           </tr>
@@ -16,15 +17,31 @@
 
         <tbody>
           <% @schedules.each do |s| %>
-          <tr onclick="location.href='<%= task_path s.task_id %>'">
+          <tr>
             <td>
+              <input name="task" type="radio" value="<%= s.task_id %>" id="task<%= s.task_id %>" />
+              <label for="task<%= s.task_id %>"></label>
+              <span id="task_badge<%= s.task_id %>" class="badge new" data-badge-caption="作業中" style="display:none;right:42px"></span>
+            </td>
+            <td onclick="location.href='<%= task_path s.task_id %>'">
               <%= s.task.project.subject %>
             </td>
-            <td>
+            <td onclick="location.href='<%= task_path s.task_id %>'">
               <%= s.task.subject %>
             </td>
           </tr>
           <% end %>
+          <tr>
+            <td>
+              <input name="task" type="radio" value="0" id="resting" />
+              <label for="resting"></label>
+              <span id="task_badge0" class="badge new light-blue accent-2" data-badge-caption="休憩中" style="display:none;right:42px"></span>
+            </td>
+            <td>
+              休憩
+            </td>
+            <td></td>
+          </tr>
         </tbody>
       </table>
   </div>

@@ -12,6 +12,6 @@ class Api::V1::ActivitiesController < ApplicationController
   private
 
   def activity_params
-    params.permit(:user_id, :behavior, :created_at)
+    params.permit(:user_id, :behavior, :task_id, :created_at)
   end
 end
