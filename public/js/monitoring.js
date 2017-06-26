@@ -20,14 +20,23 @@ var ActivityStatus = function(status) {
  */
 var ActivitySender = function(status) {
   this.status = status;
-  this.run = function(datetime) {
+
+  /**
+   * アクティビティを送信する
+   * 引数があればその値を送信
+   * なければ自身が継続して保持しているstatusを送信
+   *
+   * @param string behavior アクティビティの種類
+   * @param datetime datetime タイムスタンプ
+   */
+  this.run = function(behavior, datetime) {
     $.ajax({
       url: gon.activity_api_url,
       type: 'POST',
       dataType: 'json',
       data: {
         user_id: gon.user_id,
-        behavior: this.status.name,
+        behavior: behavior === undefined ? this.status.name : behavior,
         task_id: this.status.task_id,
         created_at: datetime
       },
@@ -47,7 +56,7 @@ var run = function() {
   activity_sender.run();
 }
 
-setInterval(run, 10000);
+setInterval(run, 20000);
 
 $(function () {
   $('input:radio[name=task]').change(function() {
@@ -63,3 +72,10 @@ $(function () {
   });
 });
 
+firebase.initializeApp(gon.config);
+
+var starCountRef = firebase.database().ref(gon.key);
+starCountRef.on('value', function(activities) {
+  var activity = activities.val();
+  activity_sender.run(activity.behavior, activity.time);
+});
