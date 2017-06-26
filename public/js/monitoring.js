@@ -30,6 +30,7 @@ var ActivitySender = function(status) {
    * @param datetime datetime タイムスタンプ
    */
   this.run = function(behavior, datetime) {
+    readText(messages['normal']['random' + Math.floor( Math.random() * 9 + 1 )]);
     $.ajax({
       url: gon.activity_api_url,
       type: 'POST',
@@ -65,9 +66,11 @@ $(function () {
     if ($(this).val() === "0") {
       activity_sender.status.name = "RESTING";
       activity_sender.status.task_id = undefined;
+      readText(messages['normal']['rest']);
     } else {
       activity_sender.status.name = "WORKING";
       activity_sender.status.task_id = $(this).val();
+      readText(messages['normal']['activity']);
     }
   });
 });
@@ -79,3 +82,46 @@ starCountRef.on('value', function(activities) {
   var activity = activities.val();
   activity_sender.run(activity.behavior, activity.time);
 });
+
+var messages = {
+  normal: {
+    activity: "頑張れよ〜〜、若干応援してるわ。",
+    rest: "ごゆっくり〜〜",
+    random1: "今度あんたの家に遊びに行くわ。",
+    random2: "詰まっても諦めずに考えろ。あんたのそのしょうもない頭でな。",
+    random3: "とりあえず何も考えずに手だけ動かしてみ。意外と何とかなるもんよ。",
+    random4: "長時間パソコン使ってるとキーボードがヌルヌルになるよな。",
+    random5: "俺もこうやって喋ってるけど、結局JavaScriptで動いてるだけなんだよね。",
+    random6: "自分のペースでしっかりやっとけば。周りとか気にしてないで。",
+    random7: "あんたの顔見てるだけで安心するわ。褒めてないけど。",
+    random8: "俺はおにぎりは温めない派だけど、あんたはどうなんだよ。",
+    random9: "暇なら俺の名前考えて。",
+  }
+};
+
+
+var readText = function(txt) {
+  $('#js-message-area').html("");
+  var switched = false
+  var txtArr = txt.split("");
+  var count = 0;
+  var txtCount = function() {
+    var timer = setTimeout(txtCount, 50);
+    $('#js-message-area').append(txtArr[count]);
+    count++;
+    if (count % 3 === 0) {
+      if (switched) {
+        $('.mitotte-area').css('background-image', 'url("/images/dogs/dog1a.png")');
+        switched = false;
+      } else {
+        $('.mitotte-area').css('background-image', 'url("/images/dogs/dog1b.png")');
+        switched = true;
+      }
+    }
+    if (count == txtArr.length) {
+      clearTimeout(timer);
+      $('.mitotte-area').css('background-image', 'url("/images/dogs/dog1a.png")');
+    }
+  }
+  txtCount();
+}
