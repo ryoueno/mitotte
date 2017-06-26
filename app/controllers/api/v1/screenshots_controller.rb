@@ -38,6 +38,38 @@ class Api::V1::ScreenshotsController < ApplicationController
     end
   end
 
+  def diff
+    screenshots = params.permit(:screenshot1, :screenshot2)
+    file1 = screenshots[:screenshot1]
+    file2 = screenshots[:screenshot2]
+    image1 = file1.read
+    image2 = file2.read
+    src1 = Digest::MD5.hexdigest(image1)
+    src2 = Digest::MD5.hexdigest(image2)
+    extension1 = File.extname(file1.original_filename).strip.downcase[1..-1]
+    extension2 = File.extname(file2.original_filename).strip.downcase[1..-1]
+    output_path1 = Rails.root.join(App::Application.config.screenshots_path, "test", "#{src1}.#{extension1}")
+    output_path2 = Rails.root.join(App::Application.config.screenshots_path, "test", "#{src2}.#{extension2}")
+
+    File.open(output_path1, 'w+b') do |fp|
+      fp.write image1
+    end
+    File.open(output_path2, 'w+b') do |fp|
+      fp.write image2
+    end
+
+    img1 = Magick::Image.read(output_path1).first
+    img2 = Magick::Image.read(output_path2).first
+
+    @image_difference = ImageDifference.new(:src1 => "#{src1}.#{extension1}", :src2 => "#{src2}.#{extension1}", :result =>  img1.difference(img2))
+
+    if @image_difference.save
+      render json: @image_difference, status: :created
+    else
+      render json: @image_difference.errors, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def fileupload_params

@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   end
 
   get 'pages/index'
+  get 'pages/diff'
 
   devise_for :users
   root to: 'home#index'
@@ -17,6 +18,8 @@ Rails.application.routes.draw do
 
   # Screenshot
   post '/api/v1/screenshots' => 'api/v1/screenshots#create'
+
+  post '/api/v1/screenshots/diff' => 'api/v1/screenshots#diff'
 
   # Activity
   post '/api/v1/activities' => 'api/v1/activities#create'
