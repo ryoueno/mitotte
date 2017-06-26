@@ -21,16 +21,19 @@ class Api::V1::ScreenshotsController < ApplicationController
 
     if @screenshot.save
       # Create job detect information from screenshot by using Cloud Vision API.
-      api_key = ENV['GOOGLE_API_KEY']
-      api_url = ENV['GOOGLE_CLOUD_VISION_API_URL']
-      url = "#{api_url}?key=#{api_key}"
-      types = ["LOGO_DETECTION", "LABEL_DETECTION", "TEXT_DETECTION", "SAFE_SEARCH_DETECTION"]
+      if not @screenshot.similar?
+        api_key = ENV['GOOGLE_API_KEY']
+        api_url = ENV['GOOGLE_CLOUD_VISION_API_URL']
+        url = "#{api_url}?key=#{api_key}"
+        types = ["LOGO_DETECTION", "LABEL_DETECTION", "TEXT_DETECTION", "SAFE_SEARCH_DETECTION"]
 
-      types.each do |type|
-        Resque.enqueue(VisionApi, url, type, @screenshot.id, @screenshot.path)
+        types.each do |type|
+          Resque.enqueue(VisionApi, url, type, @screenshot.id, @screenshot.path)
+        end
       end
 
-      set_firebase uuid
+      behavior = @screenshot.similar? ? "NOT_MOVING" : "MOVING"
+      set_firebase(uuid, behavior)
 
       render json: @screenshot, status: :created
     else
@@ -76,12 +79,12 @@ class Api::V1::ScreenshotsController < ApplicationController
     params.permit(:uuid, :screenshot)
   end
 
-  def set_firebase(uuid)
+  def set_firebase(uuid, behavior)
     key = "activity/#{uuid}"
 
     body = {
       time: Time.now.strftime("%Y-%m-%d %H:%M:%S"),
-      behavior: "MAYBE_WORKING",
+      behavior: behavior,
     }.to_json
 
     uri = URI.parse("#{ENV['GOOGLE_FIREBASE_URL']}#{key}.json")
