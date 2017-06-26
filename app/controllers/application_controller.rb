@@ -14,9 +14,9 @@ class ApplicationController < ActionController::Base
   end
 
   def check_uuid
-    if controller_name == 'registrations' and cookies[:uuid].blank?
-      raise "UUID is required."
-    end
+    # if controller_name == 'registrations' and cookies[:uuid].blank?
+    #   raise "UUID is required."
+    # end
   end
 
   def configure_permitted_parameters

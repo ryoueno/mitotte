@@ -10,16 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170616020713) do
+ActiveRecord::Schema.define(version: 20170626080521) do
 
-  create_table "activities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "activities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
     t.string   "behavior"
+    t.string   "task_id"
     t.datetime "created_at"
     t.index ["user_id"], name: "index_activities_on_user_id", using: :btree
   end
 
-  create_table "detections", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "detections", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "screenshot_id", null: false
     t.string   "mode",          null: false
     t.json     "data",          null: false
@@ -28,7 +29,15 @@ ActiveRecord::Schema.define(version: 20170616020713) do
     t.datetime "updated_at",    null: false
   end
 
-  create_table "projects", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "image_differences", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "src1",       null: false
+    t.string   "src2",       null: false
+    t.json     "result",     null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "projects", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
     t.string   "subject"
     t.text     "description", limit: 65535
@@ -38,7 +47,7 @@ ActiveRecord::Schema.define(version: 20170616020713) do
     t.datetime "updated_at",                null: false
   end
 
-  create_table "schedules", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "schedules", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "task_id"
     t.date     "date"
     t.json     "time"
@@ -47,7 +56,7 @@ ActiveRecord::Schema.define(version: 20170616020713) do
     t.index ["task_id"], name: "index_schedules_on_task_id", using: :btree
   end
 
-  create_table "screenshots", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "screenshots", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "uuid",       null: false
     t.string   "src",        null: false
     t.string   "extension",  null: false
@@ -55,7 +64,7 @@ ActiveRecord::Schema.define(version: 20170616020713) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "tasks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "tasks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "project_id"
     t.string   "subject"
     t.text     "description", limit: 65535
@@ -64,7 +73,7 @@ ActiveRecord::Schema.define(version: 20170616020713) do
     t.index ["project_id"], name: "index_tasks_on_project_id", using: :btree
   end
 
-  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name",                                null: false
     t.string   "email",                  default: "", null: false
     t.string   "uuid",                                null: false

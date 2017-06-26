@@ -1,0 +1,2 @@
+class ImageDifference < ApplicationRecord
+end
