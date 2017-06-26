@@ -49,6 +49,7 @@ class Api::V1::ScreenshotsController < ApplicationController
 
     body = {
       time: Time.now.strftime("%Y-%m-%d %H:%M:%S"),
+      behavior: "MAYBE_WORKING",
     }.to_json
 
     uri = URI.parse("#{ENV['GOOGLE_FIREBASE_URL']}#{key}.json")
