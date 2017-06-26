@@ -41,6 +41,8 @@ gem 'dotenv-rails'
 # For using valiables in JavaScropt.
 gem 'gon'
 
+gem 'rmagick'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
