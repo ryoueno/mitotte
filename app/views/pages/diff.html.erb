@@ -1,0 +1,28 @@
+<form action="/api/v1/screenshots/diff" method="post" enctype="multipart/form-data">
+    <input type="file" name="screenshot1">
+    <input type="file" name="screenshot2">
+    <input type="submit" value="send">
+</form>
+
+<table>
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>image1</th>
+            <th>image2</th>
+            <th>result</th>
+            <th>decision</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @image_differences.each do |diff| %>
+        <tr>
+            <td><%= diff.id %></td>
+            <td><img src="<%= @image_path + diff.src1 %>" width="300"></td>
+            <td><img src="<%= @image_path + diff.src2 %>" width="300"></td>
+            <td><%= diff.result %></td>
+            <td></td>
+        </tr>
+        <% end %>
+    </tbody>
+</table>
