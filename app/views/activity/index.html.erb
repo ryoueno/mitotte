@@ -1,0 +1,19 @@
+<div class="container">
+  <h5><%= @the_day.strftime("%-m月%-d日 ") %><%= @user.name %>さんの作業記録</h5>
+  <div>
+      <% before = nil %>
+      <% @activities.each do |activity| %>
+        <% #Rails標準のAPIがないので仕方なく(´・ω・` ) %>
+        <% if before and activity.created_at - before.created_at > 1.hour %>
+          <hr>
+          <div>アプリ停止</div>
+          <hr>
+        <% end %>
+        <div>
+          <%= activity.created_at.strftime("%H時%M分 ") %>  <%= activity.behavior_jp %>
+          <%= activity.subject ? "【作業内容 : #{activity.subject}】" : "" %>
+        </div>
+        <% before = activity %>
+      <% end %>
+  </div>
+</div>
