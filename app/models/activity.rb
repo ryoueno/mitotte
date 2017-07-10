@@ -6,6 +6,18 @@ class Activity < ApplicationRecord
 
   scope :aggregate, -> date {
     rows = find_by_sql(["SELECT count(*), MIN(behavior) as behavior, tasks.subject as subject, activities.created_at FROM activities LEFT JOIN tasks ON task_id = tasks.id where DATE(activities.created_at) = ? GROUP BY TRUNCATE(UNIX_TIMESTAMP(activities.created_at) / ?, 0)", date, @@second_per_group])
+    activities = {}
+    (0..23).each do |hour|
+      0.step(50, 10) do |minute|
+        activities[sprintf("%02d:%02d", hour, minute)] = nil
+      end
+    end
+    rows.each do |row|
+      # 28分 -> 20分
+      minute = (row.created_at.min.to_f / 10).floor * 10
+      activities[row.created_at.change(min: minute).strftime("%H:%M")] = row
+    end
+    return activities
   }
 
   def update_behavior
