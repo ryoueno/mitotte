@@ -1,10 +1,45 @@
 <div>
-    <div class="chart">
-    <img width="400" src='/images/activities/<%= "#{@user.id}_#{@the_day.strftime('%Y%m%d')}" %>.png'>
-    <div>
-    <% @activities.each do |time, activity| %>
-      <div><%= time %></div>
-      <div><%= activity.behavior if activity.present? %></div>
-    <% end %>
-    </div>
+  <h5><%= @the_day.strftime("%-m月%-d日 ") %><%= @user.name %>さんの作業記録</h5>
+  <p class="lime-text text-darken-1"><%= @project.subject %></p>
+  <div class="row">
+    <table class="project-detail-table">
+      <tr>
+        <td rowspan="3">
+          <table class="project-detail-table-inner">
+            <tr>
+              <th class="lime-text text-darken-1 icon"><i class="material-icons">schedule</i></th>
+              <th class="lime-text text-darken-1">開始日</th>
+              <td><%= @project.start_at.strftime("%Y年%m月%d日") %></td>
+            </tr>
+            <tr>
+              <th class="lime-text text-darken-1 icon"><i class="material-icons">schedule</i></th>
+              <th class="lime-text text-darken-1">終了日</th>
+              <td><%= @project.end_at.strftime("%Y年%m月%d日") %></td>
+            </tr>
+          </table>
+        </td>
+        <td>
+          <h5>全てのタスク数</h5>
+          <span class="lime-text text-darken-1">12</span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h5>残りのタスク数</h5>
+          <span class="lime-text text-darken-1">8</span>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="chart">
+  <img width="600" src='/images/activities/<%= "#{@user.id}_#{@the_day.strftime('%Y%m%d')}" %>.png'>
+  <div>
+  <div class="chart">
+  <img width="600" src='/images/projects/<%= "#{@project.id}_#{@the_day.strftime('%Y%m%d')}" %>.png'>
+  <div>
+  <% @activities.each do |time, activity| %>
+    <div><%= time %></div>
+    <div><%= activity.behavior if activity.present? %></div>
+  <% end %>
+  </div>
 </div>
