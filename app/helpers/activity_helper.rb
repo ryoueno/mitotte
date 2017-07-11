@@ -2,7 +2,7 @@ module ActivityHelper
 
   include Magick
 
-  def create(activities, date, user)
+  def create(activities, date, project)
     x_label_w = 20
     y_label_h = 20
     footer_h = 60
@@ -71,6 +71,6 @@ module ActivityHelper
     # 描画、保存
     dr.draw(canvas)
 
-    canvas.write(Rails.root.join(App::Application.config.activity_graph_path, "#{user.id}_#{date.strftime('%Y%m%d')}.png"))
+    canvas.write(Rails.root.join(App::Application.config.activity_graph_path, "#{project.user.id}_#{date.strftime('%Y%m%d')}.png"))
   end
 end
