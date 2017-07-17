@@ -8,7 +8,7 @@ class TaskStatus < Status
   }
 
   STATUS_JP = {
-    INITIAL: "のーたっち",
+    INITIAL: "初期",
     PENNDING: "しぶい",
     PROGLESS: "進行中",
     DONE: "完了",
