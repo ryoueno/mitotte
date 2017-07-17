@@ -43,6 +43,8 @@ gem 'gon'
 
 gem 'rmagick'
 
+gem 'gruff'
+
 # Notify to Slack
 gem 'slack-notifier'
 

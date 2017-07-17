@@ -18,10 +18,14 @@
 /log/*
 /tmp/*
 /public/images/screenshots
+/public/images/activities
+/public/images/projects
 
 !/log/.keep
 !/tmp/.keep
 !/public/images/screenshots/.keep
+!/public/images/activities/.keep
+!/public/images/projects/.keep
 
 # Ignore Byebug command history file.
 .byebug_history
