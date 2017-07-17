@@ -34,7 +34,7 @@ class Project < ApplicationRecord
       #prg[idx + 1] = idx * 200
       prg[idx + 1] = idx * 200
     end
-    #prg = [0, 20, 100, 100, 120, 330, 1000]
+    prg = [0, 20, 100, 100, 120, 330, 1000]
     prg
   end
 

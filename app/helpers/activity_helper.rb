@@ -21,6 +21,9 @@ module ActivityHelper
       c_num_h.times do |minute|
         if activities[sprintf("%02d:%02d", hour, minute * 10)]
           dr.fill(activities[sprintf("%02d:%02d", hour, minute * 10)].behavior_color)
+        elsif hour > 6 and hour < 21
+          #TODO
+          dr.fill(Activity::COLOR_LAZY)
         else
           dr.fill(Activity::COLOR_DEFAULT)
         end
@@ -58,7 +61,7 @@ module ActivityHelper
     dr.rectangle(361, 220, 361 + c_w, 220 + c_h)
     dr.fill(Activity::COLOR_DEFAULT)
     dr.rectangle(50, 246, 50 + c_w, 246 + c_h)
-    dr.fill(Activity::COLOR_MOVING)
+    dr.fill(Activity::COLOR_LAZY)
     dr.rectangle(361, 246, 361 + c_w, 246 + c_h)
 
     dr.fill('#666')
@@ -66,7 +69,7 @@ module ActivityHelper
     dr.text(86, 238, "WORKING")
     dr.text(397, 238, "RESTING")
     dr.text(86, 264, "OFF")
-    dr.text(397, 264, "NOT WORKING")
+    dr.text(397, 264, "LAZY")
 
     # 描画、保存
     dr.draw(canvas)

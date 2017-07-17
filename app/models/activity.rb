@@ -5,7 +5,8 @@ class Activity < ApplicationRecord
   @@second_per_group = 600
   COLOR_RESTIMG = "#f9fbe7"
   COLOR_WORKING = "#eeff41"
-  COLOR_MOVING = "#b71c1c"
+  COLOR_MOVING = "#eeff41"
+  COLOR_LAZY = "#3e2723"
   COLOR_RUNNING = "#f4ff81"
   COLOR_DO_SOMETHING = "#f4ff81"
   COLOR_DEFAULT = "#f6f6ff"
@@ -38,6 +39,8 @@ class Activity < ApplicationRecord
     when self.behavior.include?("WORKING")
       "作業中"
     when self.behavior.include?("MOVING")
+      "動作中"
+    when self.behavior.include?("LAZY")
       "さぼり？"
     when self.behavior.include?("RUNNING")
       "動作中"
@@ -56,6 +59,8 @@ class Activity < ApplicationRecord
       COLOR_WORKING
     when self.behavior.include?("MOVING")
       COLOR_MOVING
+    when self.behavior.include?("LAZY")
+      COLOR_LAZY
     when self.behavior.include?("RUNNING")
       COLOR_RUNNING
     when self.behavior.include?("DO_SOMETHING")
