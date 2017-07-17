@@ -43,6 +43,14 @@ gem 'gon'
 
 gem 'rmagick'
 
+gem 'gruff'
+
+# Notify to Slack
+gem 'slack-notifier'
+
+# Use 'whenever' for crontab scheduling
+gem 'whenever'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
