@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170627025509) do
+ActiveRecord::Schema.define(version: 20170717084704) do
 
   create_table "activities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -68,8 +68,9 @@ ActiveRecord::Schema.define(version: 20170627025509) do
     t.integer  "project_id"
     t.string   "subject"
     t.text     "description", limit: 65535
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.integer  "status",                    default: 0, null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.index ["project_id"], name: "index_tasks_on_project_id", using: :btree
   end
 
