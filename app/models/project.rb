@@ -3,7 +3,14 @@ class Project < ApplicationRecord
   belongs_to :user
   validates :subject, presence: true, length: { maximum: 20 }
   validates :description, presence: true, length: { maximum: 200 }
+
   MAX_GRUFF_PERIOD = 10
+
+  TODO_STATUS = [
+    :INITIAL,
+    :PENNDING,
+    :PROGLESS,
+  ]
 
   def gruff_period
     period = []
@@ -23,8 +30,12 @@ class Project < ApplicationRecord
     period
   end
 
-  def all_tasl_num
+  def all_task_num
     self.tasks.count
+  end
+
+  def todo_task_num
+    tasks.where(:status => TaskStatus::STATUS.values_at(*TODO_STATUS)).count
   end
 
   def progress
@@ -47,5 +58,15 @@ class Project < ApplicationRecord
     label
   end
 
+  def seconds
+    self.tasks.map {|t| t.seconds}.sum
+  end
 
+  def hours
+    self.tasks.map {|t| t.hours}.sum
+  end
+
+  def minutes
+    self.tasks.map {|t| t.minutes}.sum
+  end
 end

@@ -24,13 +24,17 @@
         </td>
         <td>
           <h5>全てのタスク数</h5>
-          <span class="lime-text text-darken-1">12</span>
+          <span class="lime-text text-darken-1">
+            <%= @project.all_task_num %>
+          </span>
         </td>
       </tr>
       <tr>
         <td>
           <h5>残りのタスク数</h5>
-          <span class="lime-text text-darken-1">8</span>
+          <span class="lime-text text-darken-1">
+            <%= @project.todo_task_num %>
+          </span>
         </td>
       </tr>
     </table>
@@ -42,6 +46,7 @@
         <thead>
           <tr>
               <th>日付</th>
+              <th>状態</th>
               <th>内容</th>
           </tr>
         </thead>
@@ -56,6 +61,9 @@
                 <span class="new badge light-blue accent-2" data-badge-caption="Past" style="left: 130px; right: auto;"></span>
               <% end %>
               <%= task.date.strftime("%Y年%m月%d日") %>
+            </td>
+            <td>
+              <%= task.task.status.name %>
             </td>
             <td>
               <%= task.task.subject %>
