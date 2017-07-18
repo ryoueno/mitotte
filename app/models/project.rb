@@ -58,5 +58,15 @@ class Project < ApplicationRecord
     label
   end
 
+  def seconds
+    self.tasks.map {|t| t.seconds}.sum
+  end
 
+  def hours
+    self.tasks.map {|t| t.hours}.sum
+  end
+
+  def minutes
+    self.tasks.map {|t| t.minutes}.sum
+  end
 end

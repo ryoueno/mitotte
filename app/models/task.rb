@@ -15,4 +15,16 @@ class Task < ApplicationRecord
     s = self.schedules.where('date >= ?', Date.today).order(:date).first
     s.nil? ? nil : s.time[0].start_at
   end
+
+  def seconds
+    self.schedules.map {|s| s.seconds}.sum
+  end
+
+  def hours
+    self.schedules.map {|s| s.hours}.sum
+  end
+
+  def minutes
+    self.schedules.map {|s| s.minutes}.sum
+  end
 end
