@@ -18,6 +18,7 @@ Bundler.require(*Rails.groups)
 
 module App
   class Application < Rails::Application
+    config.time_zone = 'Tokyo'
     config.screenshots_path = 'public/images/screenshots'
     config.activity_graph_path = 'public/images/activities'
     config.project_graph_path = 'public/images/projects'
