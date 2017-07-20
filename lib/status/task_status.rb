@@ -14,4 +14,8 @@ class TaskStatus < Status
     DONE: "完了",
     REJECTED: "却下",
   }
+
+  def self.get
+    STATUS.map {|key, id| [STATUS_JP[key] || key, id]}.to_h
+  end
 end

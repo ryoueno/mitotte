@@ -49,8 +49,21 @@
       </tr>
     </table>
   </div>
+  <div class="row">
+    <%= form_for(@task) do |f| %>
+      <div class="input-field col s12">
+        <%= f.select :status, options_for_select(@all_status, :selected => @task.status.id) %>
+        <label>ステータス</label>
+      </div>
+      <div class="input-field col s12">
+        <%= f.submit "登録", :class => "waves-effect waves-light btn-large" %>
+      </div>
+    <% end %>
+  </div>
 
-  <%= link_to 'Edit', edit_task_path(@task) %> |
-  <%= link_to 'Back', project_tasks_path(@task.project) %>
+  <div class="row">
+    <%= link_to 'Edit', edit_task_path(@task) %> |
+    <%= link_to 'Back', project_tasks_path(@task.project) %>
+  </div>
 
 </main>

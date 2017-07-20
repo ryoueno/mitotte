@@ -12,6 +12,7 @@ class TasksController < ApplicationController
   # GET /tasks/1
   # GET /tasks/1.json
   def show
+    @all_status = TaskStatus.get
   end
 
   # GET /tasks/new
@@ -32,7 +33,7 @@ class TasksController < ApplicationController
   def create
     default_schedule_time = [{'08:00' => '21:00'}]
     @project = Project.where(:id => params[:project_id], :user_id => current_user.id).first
-    task_params.each_value do |t|
+    tasks_params.each_value do |t|
       next if t[:subject].empty? or t[:schedules].nil?
       @task = @project.tasks.build({:subject => t[:subject]})
       @res = @task.save
@@ -52,7 +53,7 @@ class TasksController < ApplicationController
   def update
     respond_to do |format|
       if @task.update(task_params)
-        format.html { redirect_to @project, notice: 'Task was successfully updated.' }
+        format.html { redirect_to @task, notice: 'Task was successfully updated.' }
         format.json { render :show, status: :ok, location: @task }
       else
         format.html { render :edit }
@@ -82,8 +83,12 @@ class TasksController < ApplicationController
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
-    def task_params
+    def tasks_params
       params.require(:tasks)
+    end
+
+    def task_params
+      params.require(:task).permit(:status)
     end
 
     def divide_schedule_date(project)
