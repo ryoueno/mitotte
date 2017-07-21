@@ -1,0 +1,8 @@
+<%= form_tag(schedule_path, :method => :put) do %>
+  <% schedules.each do |schedule| %>
+    <% schedule.time.each do |t| %>
+      <%= select_tag "schedules[#{schedule.id}][time][start_at]", grouped_options_for_select(select_time, :selected => t.start_at.strftime("%H:%M")), :prompt => "-- : --" %>
+      <%= select_tag "schedules[#{schedule.id}][time][end_at]", grouped_options_for_select(select_time, :selected => t.end_at.strftime("%H:%M")), :prompt => "-- : --" %>
+    <% end %>
+  <% end %>
+<% end %>

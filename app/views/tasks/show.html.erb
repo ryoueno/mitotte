@@ -60,6 +60,9 @@
       </div>
     <% end %>
   </div>
+  <div class="row">
+    <%= render 'form_with_times', schedules: @task.schedules %>
+  </div>
 
   <div class="row">
     <%= link_to 'Edit', edit_task_path(@task) %> |
