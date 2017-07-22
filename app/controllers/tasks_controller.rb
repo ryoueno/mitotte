@@ -66,7 +66,6 @@ class TasksController < ApplicationController
     schedule_params.each do |schedule_id, time_sets|
       tmp = []
       time_sets[:time].each_value do |time_set|
-        logger.debug time_set
         if time_set[:start_at].present? and time_set[:end_at].present?
           tmp.push({time_set[:start_at] => time_set[:end_at]})
         end
@@ -74,7 +73,6 @@ class TasksController < ApplicationController
       Schedule.find(schedule_id).update(:time => tmp)
     end
     redirect_to task_path(@task), notice: "更新しました"
-    #render json: schedule_params
   end
 
   # DELETE /tasks/1
