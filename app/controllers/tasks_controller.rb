@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: [:show, :edit, :update, :destroy]
+  before_action :set_task, only: [:show, :edit, :update, :update_schedule, :destroy]
   before_action :set_project, only: [:index, :show, :new, :create]
   MAX_TASK_ROW = 10
 
@@ -12,6 +12,7 @@ class TasksController < ApplicationController
   # GET /tasks/1
   # GET /tasks/1.json
   def show
+    @all_status = TaskStatus.get
   end
 
   # GET /tasks/new
@@ -32,7 +33,7 @@ class TasksController < ApplicationController
   def create
     default_schedule_time = [{'08:00' => '21:00'}]
     @project = Project.where(:id => params[:project_id], :user_id => current_user.id).first
-    task_params.each_value do |t|
+    tasks_params.each_value do |t|
       next if t[:subject].empty? or t[:schedules].nil?
       @task = @project.tasks.build({:subject => t[:subject]})
       @res = @task.save
@@ -52,13 +53,28 @@ class TasksController < ApplicationController
   def update
     respond_to do |format|
       if @task.update(task_params)
-        format.html { redirect_to @project, notice: 'Task was successfully updated.' }
+        format.html { redirect_to @task, notice: 'Task was successfully updated.' }
         format.json { render :show, status: :ok, location: @task }
       else
         format.html { render :edit }
         format.json { render json: @task.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def update_schedule
+    schedule_params.each do |schedule_id, time_sets|
+      tmp = []
+      time_sets[:time].each_value do |time_set|
+        logger.debug time_set
+        if time_set[:start_at].present? and time_set[:end_at].present?
+          tmp.push({time_set[:start_at] => time_set[:end_at]})
+        end
+      end
+      Schedule.find(schedule_id).update(:time => tmp)
+    end
+    redirect_to task_path(@task), notice: "更新しました"
+    #render json: schedule_params
   end
 
   # DELETE /tasks/1
@@ -82,8 +98,16 @@ class TasksController < ApplicationController
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
-    def task_params
+    def tasks_params
       params.require(:tasks)
+    end
+
+    def task_params
+      params.require(:task).permit(:status)
+    end
+
+    def schedule_params
+      params.require(:schedules)
     end
 
     def divide_schedule_date(project)
