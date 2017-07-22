@@ -55,7 +55,7 @@
         <%= f.select :status, options_for_select(@all_status, :selected => @task.status.id) %>
         <label>ステータス</label>
       </div>
-      <div class="input-field col s12">
+      <div class="input-field col s12 right-align">
         <%= f.submit "登録", :class => "waves-effect waves-light btn-large" %>
       </div>
     <% end %>
