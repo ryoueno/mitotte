@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: [:show, :edit, :update, :destroy]
+  before_action :set_task, only: [:show, :edit, :update, :update_schedule, :destroy]
   before_action :set_project, only: [:index, :show, :new, :create]
   MAX_TASK_ROW = 10
 
@@ -62,6 +62,21 @@ class TasksController < ApplicationController
     end
   end
 
+  def update_schedule
+    schedule_params.each do |schedule_id, time_sets|
+      tmp = []
+      time_sets[:time].each_value do |time_set|
+        logger.debug time_set
+        if time_set[:start_at].present? and time_set[:end_at].present?
+          tmp.push({time_set[:start_at] => time_set[:end_at]})
+        end
+      end
+      Schedule.find(schedule_id).update(:time => tmp)
+    end
+    redirect_to task_path(@task), notice: "更新しました"
+    #render json: schedule_params
+  end
+
   # DELETE /tasks/1
   # DELETE /tasks/1.json
   def destroy
@@ -89,6 +104,10 @@ class TasksController < ApplicationController
 
     def task_params
       params.require(:task).permit(:status)
+    end
+
+    def schedule_params
+      params.require(:schedules)
     end
 
     def divide_schedule_date(project)

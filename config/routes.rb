@@ -3,7 +3,7 @@ Rails.application.routes.draw do
     resources :tasks
   end
 
-  put 'schedule' => 'schedule#update'
+  put 'schedule/:id' => 'tasks#update_schedule', as: :update_schedule
 
   get 'pages/index'
   get 'pages/diff'
