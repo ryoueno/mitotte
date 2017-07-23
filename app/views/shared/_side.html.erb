@@ -48,5 +48,28 @@
                 </div>
             </div>
         </li>
+        <li>
+            <div class="collapsible-header">
+                <i class="material-icons">multiline_chart</i>アクティビティ
+            </div>
+            <div class="collapsible-body">
+                <div class="row">
+                    <div class="col s12 m12">
+                        <ul>
+                            <li>
+                                <%= link_to activity_path current_user.projects.first.id, *Date.today.strftime("%Y %m %d").split(" ") do %>
+                                    <i class="material-icons">signal_cellular_4_bar</i>本日の作業記録
+                                <% end %>
+                            </li>
+                            <li>
+                                <%= link_to activity_path current_user.projects.first.id, *Date.yesterday.strftime("%Y %m %d").split(" ") do %>
+                                    <i class="material-icons">signal_cellular_null</i>昨日の作業記録
+                                <% end %>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </li>
     </ul>
 </div>
