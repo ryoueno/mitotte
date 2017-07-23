@@ -67,6 +67,7 @@ class TasksController < ApplicationController
       tmp = []
       time_sets[:time].each_value do |time_set|
         if time_set[:start_at].present? and time_set[:end_at].present?
+          time_set[:end_at], time_set[:start_at] = time_set[:start_at], time_set[:end_at] if time_set[:start_at] > time_set[:end_at]
           tmp.push({time_set[:start_at] => time_set[:end_at]})
         end
       end
