@@ -27,4 +27,11 @@ class Task < ApplicationRecord
   def minutes
     self.schedules.map {|s| s.minutes}.sum
   end
+
+  def todo?(time)
+    self.schedules.each do |s|
+      return true if s.todo? time
+    end
+    return false
+  end
 end

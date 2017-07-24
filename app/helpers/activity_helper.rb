@@ -10,7 +10,7 @@ module ActivityHelper
     c_h = 20
     f_m = 30
     c_m = 6
-    c_num_w = 25
+    c_num_w = 24
     c_num_h = 6
     img_w = x_label_w + (f_m * 2) + (c_w + c_m) * c_num_w - c_m
     img_h = y_label_h + (f_m * 2) + (c_h + c_m) * c_num_h - c_m + footer_h
@@ -21,7 +21,7 @@ module ActivityHelper
       c_num_h.times do |minute|
         if activities[sprintf("%02d:%02d", hour, minute * 10)]
           dr.fill(activities[sprintf("%02d:%02d", hour, minute * 10)].behavior_color)
-        elsif hour > 6 and hour < 21
+        elsif project.todo? Tod::TimeOfDay.new(hour, minute)
           #TODO
           dr.fill(Activity::COLOR_LAZY)
         else
@@ -47,7 +47,7 @@ module ActivityHelper
     dr.text(180, 36, "06")
     dr.text(335, 36, "12")
     dr.text(491, 36, "18")
-    dr.text(673, 36, "24")
+    dr.text(647, 36, "23")
 
     # Y Label
     dr.text(16, 66, "00")

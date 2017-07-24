@@ -45,6 +45,8 @@ gem 'rmagick'
 
 gem 'gruff'
 
+gem 'tod'
+
 # Notify to Slack
 gem 'slack-notifier'
 
