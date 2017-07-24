@@ -20,13 +20,13 @@
         </td>
         <td>
           <h5>全てのタスク数</h5>
-          <span class="lime-text text-darken-1">12</span>
+          <span class="lime-text text-darken-1"><%= @project.all_task_num %></span>
         </td>
       </tr>
       <tr>
         <td>
           <h5>残りのタスク数</h5>
-          <span class="lime-text text-darken-1">8</span>
+          <span class="lime-text text-darken-1"><%= @project.todo_task_num %></span>
         </td>
       </tr>
     </table>

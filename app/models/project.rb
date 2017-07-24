@@ -70,9 +70,9 @@ class Project < ApplicationRecord
     self.tasks.map {|t| t.minutes}.sum
   end
 
-  def todo?(time)
+  def todo?(date, time)
     self.tasks.each do |t|
-      return true if t.todo? time
+      return true if t.todo? date, time
     end
     return false
   end

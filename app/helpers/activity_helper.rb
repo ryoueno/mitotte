@@ -21,7 +21,7 @@ module ActivityHelper
       c_num_h.times do |minute|
         if activities[sprintf("%02d:%02d", hour, minute * 10)]
           dr.fill(activities[sprintf("%02d:%02d", hour, minute * 10)].behavior_color)
-        elsif project.todo? Tod::TimeOfDay.new(hour, minute)
+        elsif project.todo? date, Tod::TimeOfDay.new(hour, minute)
           #TODO
           dr.fill(Activity::COLOR_LAZY)
         else
