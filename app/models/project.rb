@@ -69,4 +69,11 @@ class Project < ApplicationRecord
   def minutes
     self.tasks.map {|t| t.minutes}.sum
   end
+
+  def todo?(date, time)
+    self.tasks.each do |t|
+      return true if t.todo? date, time
+    end
+    return false
+  end
 end

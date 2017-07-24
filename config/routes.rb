@@ -26,5 +26,5 @@ Rails.application.routes.draw do
   # Activity
   post '/api/v1/activities' => 'api/v1/activities#create'
 
-  get 'activity/:project_id/:year/:month/:day' => 'activity#index'
+  get 'activity/:project_id/:year/:month/:day' => 'activity#index', as: :activity
 end

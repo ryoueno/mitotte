@@ -9,11 +9,11 @@ class Schedule < ApplicationRecord
 
   def time
     time_sets = JSON.parse self.time_before_type_cast
-    time_sets.map {|time| ScheduleTime.new(self.date, time) }
+    time_sets.map {|time| ScheduleTime.new(time) }
   end
 
   def seconds
-    self.time.map {|t| t.end_at - t.start_at }.sum.to_i
+    self.time.map {|t| (t.end_at - t.start_at).to_i }.sum
   end
 
   def minutes
@@ -22,5 +22,12 @@ class Schedule < ApplicationRecord
 
   def hours
     self.seconds / (60 * 60)
+  end
+
+  def todo?(time)
+    self.time.each do |time_set|
+      return true if (time_set.start_at <= time and time_set.end_at > time)
+    end
+    return false
   end
 end
