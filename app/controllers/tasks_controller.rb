@@ -52,11 +52,26 @@ class TasksController < ApplicationController
   # PATCH/PUT /tasks/1.json
   def update
     respond_to do |format|
-      if @task.update(task_params)
+      begin
+        # タスクのステータスを変更 -> 記録
+        Task.transaction do
+          old_id = @task.status.id
+          @task.update!(task_params)
+          if !@task.status.id.eql?(old_id)
+            UserLog.create(
+              :user_id => current_user.id,
+              :object_id => @task.id,
+              :behavior => UserBehaviors::STATUS[:TASK_STATE_UPDATE],
+              :update_from => old_id,
+              :update_to => @task.status.id,
+              :meta => []
+            )
+          end
+        end
         format.html { redirect_to @task, notice: 'Task was successfully updated.' }
         format.json { render :show, status: :ok, location: @task }
-      else
-        format.html { render :edit }
+      rescue => e
+        format.html { redirect_to @task, notice: 'Task was successfully updated.' }
         format.json { render json: @task.errors, status: :unprocessable_entity }
       end
     end
