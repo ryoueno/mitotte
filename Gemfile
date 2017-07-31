@@ -47,6 +47,8 @@ gem 'gruff'
 
 gem 'tod'
 
+gem 'faker'
+
 # Notify to Slack
 gem 'slack-notifier'
 

@@ -65,6 +65,8 @@ GEM
       railties (>= 3.2, < 5.2)
     erubis (2.7.0)
     execjs (2.7.0)
+    faker (1.8.4)
+      i18n (~> 0.5)
     ffi (1.9.14)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
@@ -215,6 +217,7 @@ DEPENDENCIES
   daemon-spawn
   devise
   dotenv-rails
+  faker
   gon
   gruff
   jbuilder (~> 2.5)
