@@ -49,6 +49,8 @@ gem 'tod'
 
 gem 'faker'
 
+gem 'seed-fu'
+
 # Notify to Slack
 gem 'slack-notifier'
 
