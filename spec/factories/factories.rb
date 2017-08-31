@@ -10,4 +10,5 @@ FactoryGirl.define do
   sequence(:task_subject) { Faker::Pokemon.name + "を捕まえる" }
   sequence(:task_description) { Faker::Pokemon.name + "を捕まえて、育成する" }
   sequence(:task_status) { TaskStatus::get.values.sample }
+  sequence(:extension) { "png" }
 end
