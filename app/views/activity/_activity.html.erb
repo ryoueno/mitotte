@@ -38,8 +38,11 @@
   <img width="600" src='/images/projects/<%= "#{@project.id}_#{@the_day.strftime('%Y%m%d')}" %>.png'>
   <div>
   <% @activities.each do |time, activity| %>
-    <div><%= time %></div>
-    <div><%= activity.behavior if activity.present? %></div>
+    <div>
+      <span><%= "【#{time}】" %></span>
+      <span><%= "TODO" if @project.todo?(@the_day, time_of_day(time)) %></span>
+      <span><%= activity.behavior if activity.present? %></span>
+    </div>
   <% end %>
   </div>
 </div>
