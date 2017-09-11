@@ -5,5 +5,8 @@ FactoryGirl.define do
     description { generate :description }
     start_at { generate :start_at }
     end_at { generate :end_at }
+    tasks {[
+      FactoryGirl.create(:task)
+    ]}
   end
 end
