@@ -1,6 +1,5 @@
 FactoryGirl.define do
   factory :task do
-    project
     subject { generate :task_subject }
     description { generate :task_description }
     status { generate :task_status }
