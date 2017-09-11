@@ -12,16 +12,16 @@ class Project < ApplicationRecord
     :PROGLESS,
   ]
 
-  def gruff_period
+  def gruff_period(max_period = MAX_GRUFF_PERIOD)
     period = []
     (self.start_at..self.end_at).each do |date|
       period.push date
     end
-    if period.count > MAX_GRUFF_PERIOD
-      div = period.count / MAX_GRUFF_PERIOD
+    if period.count > max_period
+      div = period.count / max_period
       data = period
       period = []
-      MAX_GRUFF_PERIOD.times do |t|
+      max_period.times do |t|
         period[t] = data[t * div]
       end
       period[0] = self.start_at
@@ -58,8 +58,8 @@ class Project < ApplicationRecord
     label
   end
 
-  def seconds
-    self.tasks.map {|t| t.seconds}.sum
+  def days
+    (self.end_at - self.start_at).to_i
   end
 
   def hours
@@ -68,6 +68,10 @@ class Project < ApplicationRecord
 
   def minutes
     self.tasks.map {|t| t.minutes}.sum
+  end
+
+  def seconds
+    self.tasks.map {|t| t.seconds}.sum
   end
 
   def todo?(date, time)
