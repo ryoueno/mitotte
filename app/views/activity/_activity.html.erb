@@ -35,7 +35,7 @@
   <img width="600" src='/images/activities/<%= "#{@user.id}_#{@the_day.strftime('%Y%m%d')}" %>.png'>
   <div>
   <div class="chart">
-  <img width="600" src='/images/projects/<%= "#{@project.id}_#{@the_day.strftime('%Y%m%d')}" %>.png'>
+  <img width="600" style="border:1px solid" src='/images/projects/<%= "#{@project.id}_#{@the_day.strftime('%Y%m%d')}" %>.png'>
   <div>
   <% @activities.each do |time, activity| %>
     <div>
