@@ -2,7 +2,7 @@ module ActivityHelper
 
   include Magick
 
-  def create(activities, date, project)
+  def generate_activity_table(activities, date, project)
     x_label_w = 20
     y_label_h = 20
     footer_h = 60
@@ -75,5 +75,42 @@ module ActivityHelper
     dr.draw(canvas)
 
     canvas.write(Rails.root.join(App::Application.config.activity_graph_path, "#{project.user.id}_#{date.strftime('%Y%m%d')}.png"))
+  end
+
+  def generate_progress_graph
+    g = Gruff::Bezier.new
+    g.theme= {
+      :colors => ["#fff", "#c0ca33"],
+      :marker_color => "#fff",
+      :background_colors => "#fff",
+      :font_color => "#666",
+    }
+    g.legend_margin = 100
+    g.marker_font_size = 12
+    progress = ProgressGraph.new(@project.start_at, @project.end_at)
+    g.labels = progress.get_label
+
+    # グラフを大きく見せるために仕方なく
+    g.data :Dammy, (0..g.labels.count - 1).to_a.map {|d| d * 200}
+
+    # 進捗データ
+    g.data :TODO, @project.progress
+
+    g.font = 'DejaVu-Sans'
+    save_path = Rails.root.join(App::Application.config.project_graph_path, "#{@project.id}_#{@the_day.strftime('%Y%m%d')}.png")
+    g.write(save_path)
+
+    # グラフを編集
+    img = Magick::Image.read(save_path).first
+
+    # 現在時点アイコン追加
+    icon = Magick::Image.read('public/images/dogs/dog_icon.png').first
+    icon.resize!(60, 40)
+    img = img.crop(Magick::SouthEastGravity, 680, 450)
+    graph_width = 680 #推定ベース画像サイズ
+    img.composite!(icon, progress.now_position * graph_width / progress.max_period, 300, Magick::OverCompositeOp)
+
+    # 追加描画
+    img.write(save_path)
   end
 end
