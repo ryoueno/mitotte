@@ -37,7 +37,7 @@ class Project < ApplicationRecord
 
   def todo?(date, time)
     self.tasks.each do |t|
-      return true if t.todo? date, time
+      return true if t.todo_at? date, time
     end
     return false
   end

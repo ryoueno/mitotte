@@ -24,7 +24,7 @@ class Schedule < ApplicationRecord
     self.seconds / (60 * 60)
   end
 
-  def todo?(time)
+  def todo_at?(time)
     self.time.each do |time_set|
       return true if (time_set.start_at <= time and time_set.end_at > time)
     end
