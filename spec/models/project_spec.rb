@@ -10,17 +10,9 @@ RSpec.describe Project, type: :model do
       expect(create(:project).all_task_num).to eq 1
     end
 
-    it 'count task to do' do
-      project = create(:project)
-      project.tasks.first.update!(status: TaskStatus::STATUS[:INITIAL])
-      expect(project.todo_task_num).to eq 1
-    end
+    it 'count task to do'
 
-    it 'count task that it do not have to do' do
-      project = create(:project)
-      project.tasks.first.update!(status: TaskStatus::STATUS[:DONE])
-      expect(project.todo_task_num).to eq 0
-    end
+    it 'count task that it do not have to do'
   end
 
   it 'is available the values indicative progress'

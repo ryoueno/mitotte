@@ -4,18 +4,8 @@ class Project < ApplicationRecord
   validates :subject, presence: true, length: { maximum: 20 }
   validates :description, presence: true, length: { maximum: 200 }
 
-  TODO_STATUS = [
-    :INITIAL,
-    :PENNDING,
-    :PROGLESS,
-  ]
-
   def all_task_num
     self.tasks.count
-  end
-
-  def todo_task_num
-    tasks.where(:status => TaskStatus::STATUS.values_at(*TODO_STATUS)).count
   end
 
   def progress
