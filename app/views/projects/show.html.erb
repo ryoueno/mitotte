@@ -25,7 +25,7 @@
         <td>
           <h5>全てのタスク数</h5>
           <span class="lime-text text-darken-1">
-            <%= @project.all_task_num %>
+            <%= @project.tasks.count %>
           </span>
         </td>
       </tr>
@@ -33,7 +33,7 @@
         <td>
           <h5>残りのタスク数</h5>
           <span class="lime-text text-darken-1">
-            <%= @project.todo_task_num %>
+            <%= @project.todo_tasks.count %>
           </span>
         </td>
       </tr>
@@ -63,7 +63,7 @@
               <%= task.date.strftime("%Y年%m月%d日") %>
             </td>
             <td>
-              <%= task.task.status.name %>
+              <%= task.task.task_status.name %>
             </td>
             <td>
               <%= task.task.subject %>
