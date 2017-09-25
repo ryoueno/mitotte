@@ -18,6 +18,22 @@ RSpec.describe Task, type: :model do
   end
 
   it 'make a judgment to do now' do
-    expect(create(:task).todo?(Date.today, Tod::TimeOfDay.new(19, 0, 0))).to be true
+    task = create(:task)
+    task.update!(task_status_id: TaskStatus::where(:name => 'INITIAL').first.id)
+    expect(task.todo_at?(time: Tod::TimeOfDay.new(19, 0, 0))).to be true
+  end
+
+  context 'Make a judgement to do task itself' do
+    it 'return true when the status is [todo] value' do
+      task = create(:task)
+      task.update!(task_status_id: TaskStatus::where(:name => 'INITIAL').first.id)
+      expect(task.todo?).to be true
+    end
+
+    it 'return false when the status is not [todo] value' do
+      task = create(:task)
+      task.update!(task_status_id: TaskStatus::where(:name => 'DONE').first.id)
+      expect(task.todo?).to be false
+    end
   end
 end

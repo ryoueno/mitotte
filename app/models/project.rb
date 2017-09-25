@@ -4,18 +4,12 @@ class Project < ApplicationRecord
   validates :subject, presence: true, length: { maximum: 20 }
   validates :description, presence: true, length: { maximum: 200 }
 
-  TODO_STATUS = [
-    :INITIAL,
-    :PENNDING,
-    :PROGLESS,
-  ]
-
   def all_task_num
     self.tasks.count
   end
 
-  def todo_task_num
-    tasks.where(:status => TaskStatus::STATUS.values_at(*TODO_STATUS)).count
+  def todo_tasks(date: nil, time: nil, ignore_status: false)
+    self.tasks.select {|t| t.todo_at?(date: date, time: time, ignore_status: ignore_status)}
   end
 
   def progress
@@ -45,9 +39,11 @@ class Project < ApplicationRecord
     self.tasks.map {|t| t.seconds}.sum
   end
 
-  def todo?(date, time)
+  def todo_at?(date: nil, time: nil, ignore_status: false)
+    date ||= Date.today
+    time ||= Tod::TimeOfDay(Time.now)
     self.tasks.each do |t|
-      return true if t.todo? date, time
+      return true if t.todo_at?(date: date, time: time, ignore_status: ignore_status)
     end
     return false
   end

@@ -22,6 +22,6 @@ describe Schedule, type: :model do
   end
 
   it 'make a judgment to do now' do
-    expect(create(:schedule).todo?(Tod::TimeOfDay.new(9, 0, 0))).to be true
+    expect(create(:schedule).todo_at?(Tod::TimeOfDay.new(9, 0, 0))).to be true
   end
 end

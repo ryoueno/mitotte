@@ -7,19 +7,24 @@ RSpec.describe Project, type: :model do
 
   context 'there are some tasks' do
     it 'is available the number of tasks' do
-      expect(create(:project).all_task_num).to eq 1
+      expect(create(:project).tasks.count).to eq 1
     end
 
-    it 'count task to do' do
-      project = create(:project)
-      project.tasks.first.update!(status: TaskStatus::STATUS[:INITIAL])
-      expect(project.todo_task_num).to eq 1
-    end
-
-    it 'count task that it do not have to do' do
-      project = create(:project)
-      project.tasks.first.update!(status: TaskStatus::STATUS[:DONE])
-      expect(project.todo_task_num).to eq 0
+    context 'countable' do
+      it 'has one task to do' do
+        project = create(:project)
+        tasks = project.tasks
+        task = tasks.first
+        task.update(:task_status_id => TaskStatus::where(:name => 'INITIAL').first.id)
+        expect(project.todo_tasks(time: Tod::TimeOfDay.new(9, 0, 0)).count).to eq 1
+      end
+      it 'has no task to do' do
+        project = create(:project)
+        tasks = project.tasks
+        task = tasks.first
+        task.update(:task_status_id => TaskStatus::where(:name => 'DONE').first.id)
+        expect(project.todo_tasks(time: Tod::TimeOfDay.new(9, 0, 0)).count).to eq 0
+      end
     end
   end
 
@@ -41,7 +46,20 @@ RSpec.describe Project, type: :model do
     expect(create(:project).seconds).to eq 28800
   end
 
-  it 'make a judgment to do now' do
-    expect(create(:project).todo?(Date.today, Tod::TimeOfDay.new(9, 0, 0))).to be true
+  context 'Make a judgment' do
+    it 'returns true when its status is [todo] now' do
+      project = create(:project)
+      tasks = project.tasks
+      task = tasks.first
+      task.update(:task_status_id => TaskStatus::where(:name => 'INITIAL').first.id)
+      expect(project.todo_at?(time: Tod::TimeOfDay.new(9, 0, 0))).to be true
+    end
+    it 'returns false when its status is not [todo] now' do
+      project = create(:project)
+      tasks = project.tasks
+      task = tasks.first
+      task.update(:task_status_id => TaskStatus::where(:name => 'DONE').first.id)
+      expect(project.todo_at?(time: Tod::TimeOfDay.new(9, 0, 0))).to be false
+    end
   end
 end
