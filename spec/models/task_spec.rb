@@ -20,7 +20,7 @@ RSpec.describe Task, type: :model do
   it 'make a judgment to do now' do
     task = create(:task)
     task.update!(task_status_id: TaskStatus::where(:name => 'INITIAL').first.id)
-    expect(task.todo_at?(Date.today, Tod::TimeOfDay.new(19, 0, 0))).to be true
+    expect(task.todo_at?(time: Tod::TimeOfDay.new(19, 0, 0))).to be true
   end
 
   context 'Make a judgement to do task itself' do

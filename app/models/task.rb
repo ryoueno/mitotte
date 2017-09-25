@@ -37,7 +37,9 @@ class Task < ApplicationRecord
   end
 
   # 与えられた時間において、作業すべきかどうか
-  def todo_at?(date, time, ignore_status=false)
+  def todo_at?(date: nil, time: nil, ignore_status: false)
+    date ||= Date.today
+    time ||= Tod::TimeOfDay(Time.now)
     # 指定の時間に作業スケジュールが設定されているかどうか判定
     is_todo = false
     self.schedules.where(:date => date).each do |s|

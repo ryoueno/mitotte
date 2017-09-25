@@ -8,6 +8,10 @@ class Project < ApplicationRecord
     self.tasks.count
   end
 
+  def todo_tasks(date: nil, time: nil, ignore_status: false)
+    self.tasks.select {|t| t.todo_at?(date: date, time: time, ignore_status: ignore_status)}
+  end
+
   def progress
     prg = []
     # prg[0] = 0
@@ -35,9 +39,11 @@ class Project < ApplicationRecord
     self.tasks.map {|t| t.seconds}.sum
   end
 
-  def todo?(date, time)
+  def todo_at?(date: nil, time: nil, ignore_status: false)
+    date ||= Date.today
+    time ||= Tod::TimeOfDay(Time.now)
     self.tasks.each do |t|
-      return true if t.todo_at? date, time
+      return true if t.todo_at?(date: date, time: time, ignore_status: ignore_status)
     end
     return false
   end
