@@ -2,7 +2,7 @@ module ActivityHelper
 
   include Magick
 
-  def create(activities, date, project)
+  def generate_activity_table(activities, date, project)
     x_label_w = 20
     y_label_h = 20
     footer_h = 60
@@ -10,7 +10,7 @@ module ActivityHelper
     c_h = 20
     f_m = 30
     c_m = 6
-    c_num_w = 25
+    c_num_w = 24
     c_num_h = 6
     img_w = x_label_w + (f_m * 2) + (c_w + c_m) * c_num_w - c_m
     img_h = y_label_h + (f_m * 2) + (c_h + c_m) * c_num_h - c_m + footer_h
@@ -19,9 +19,9 @@ module ActivityHelper
     dr.stroke_width(1)
     c_num_w.times do |hour|
       c_num_h.times do |minute|
-        if activities[sprintf("%02d:%02d", hour, minute * 10)]
-          dr.fill(activities[sprintf("%02d:%02d", hour, minute * 10)].behavior_color)
-        elsif hour > 6 and hour < 21
+        if activities[sprintf("%02d:%02d", hour + 1, minute * 10)]
+          dr.fill(activities[sprintf("%02d:%02d", hour + 1, minute * 10)].behavior_color)
+        elsif project.todo_at?(date: date, time: Tod::TimeOfDay.new(hour, minute))
           #TODO
           dr.fill(Activity::COLOR_LAZY)
         else
@@ -47,7 +47,7 @@ module ActivityHelper
     dr.text(180, 36, "06")
     dr.text(335, 36, "12")
     dr.text(491, 36, "18")
-    dr.text(673, 36, "24")
+    dr.text(647, 36, "23")
 
     # Y Label
     dr.text(16, 66, "00")
@@ -75,5 +75,42 @@ module ActivityHelper
     dr.draw(canvas)
 
     canvas.write(Rails.root.join(App::Application.config.activity_graph_path, "#{project.user.id}_#{date.strftime('%Y%m%d')}.png"))
+  end
+
+  def generate_progress_graph
+    g = Gruff::Bezier.new
+    g.theme= {
+      :colors => ["#fff", "#c0ca33"],
+      :marker_color => "#fff",
+      :background_colors => "#fff",
+      :font_color => "#666",
+    }
+    g.legend_margin = 100
+    g.marker_font_size = 12
+    progress = ProgressGraph.new(@project.start_at, @project.end_at)
+    g.labels = progress.get_label
+
+    # グラフを大きく見せるために仕方なく
+    g.data :Dammy, (0..g.labels.count - 1).to_a.map {|d| d * 200}
+
+    # 進捗データ
+    g.data :TODO, @project.progress
+
+    g.font = 'DejaVu-Sans'
+    save_path = Rails.root.join(App::Application.config.project_graph_path, "#{@project.id}_#{@the_day.strftime('%Y%m%d')}.png")
+    g.write(save_path)
+
+    # グラフを編集
+    img = Magick::Image.read(save_path).first
+
+    # 現在時点アイコン追加
+    icon = Magick::Image.read('public/images/dogs/dog_icon.png').first
+    icon.resize!(60, 40)
+    img = img.crop(Magick::SouthEastGravity, 680, 450)
+    graph_width = 680 #推定ベース画像サイズ
+    img.composite!(icon, progress.now_position * graph_width / progress.max_period, 300, Magick::OverCompositeOp)
+
+    # 追加描画
+    img.write(save_path)
   end
 end

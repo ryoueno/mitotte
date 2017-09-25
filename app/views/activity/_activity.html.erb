@@ -20,13 +20,13 @@
         </td>
         <td>
           <h5>全てのタスク数</h5>
-          <span class="lime-text text-darken-1">12</span>
+          <span class="lime-text text-darken-1"><%= @project.tasks.count %></span>
         </td>
       </tr>
       <tr>
         <td>
           <h5>残りのタスク数</h5>
-          <span class="lime-text text-darken-1">8</span>
+          <span class="lime-text text-darken-1"><%= @project.todo_tasks.count %></span>
         </td>
       </tr>
     </table>
@@ -35,11 +35,14 @@
   <img width="600" src='/images/activities/<%= "#{@user.id}_#{@the_day.strftime('%Y%m%d')}" %>.png'>
   <div>
   <div class="chart">
-  <img width="600" src='/images/projects/<%= "#{@project.id}_#{@the_day.strftime('%Y%m%d')}" %>.png'>
+  <img width="600" style="border:1px solid" src='/images/projects/<%= "#{@project.id}_#{@the_day.strftime('%Y%m%d')}" %>.png'>
   <div>
   <% @activities.each do |time, activity| %>
-    <div><%= time %></div>
-    <div><%= activity.behavior if activity.present? %></div>
+    <div>
+      <span><%= "【#{time}】" %></span>
+      <span><%= "TODO" if @project.todo_at?(date: @the_day, time: time_of_day(time)) %></span>
+      <span><%= activity.behavior if activity.present? %></span>
+    </div>
   <% end %>
   </div>
 </div>

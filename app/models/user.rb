@@ -13,6 +13,10 @@ class User < ApplicationRecord
     self
   end
 
+  def self.keywords
+    @@keywords
+  end
+
   @@keywords = [
     "あーもんど",
     "あぶら",

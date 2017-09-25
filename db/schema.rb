@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170627025509) do
+ActiveRecord::Schema.define(version: 20170918015309) do
 
   create_table "activities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -64,13 +64,30 @@ ActiveRecord::Schema.define(version: 20170627025509) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "task_statuses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "name"
+    t.string "display"
+  end
+
   create_table "tasks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "project_id"
+    t.integer  "task_status_id"
     t.string   "subject"
-    t.text     "description", limit: 65535
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.text     "description",    limit: 65535
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
     t.index ["project_id"], name: "index_tasks_on_project_id", using: :btree
+    t.index ["task_status_id"], name: "index_tasks_on_task_status_id", using: :btree
+  end
+
+  create_table "user_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "user_id"
+    t.integer  "object_id"
+    t.integer  "behavior"
+    t.string   "update_from"
+    t.string   "update_to"
+    t.json     "meta"
+    t.datetime "created_at"
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -95,4 +112,5 @@ ActiveRecord::Schema.define(version: 20170627025509) do
 
   add_foreign_key "activities", "users"
   add_foreign_key "tasks", "projects"
+  add_foreign_key "tasks", "task_statuses"
 end
