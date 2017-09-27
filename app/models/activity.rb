@@ -1,6 +1,5 @@
 class Activity < ApplicationRecord
   belongs_to :user
-  before_save :update_behavior
 
   @@second_per_group = 600
   COLOR_RESTIMG = "#f9fbe7"
@@ -26,11 +25,6 @@ class Activity < ApplicationRecord
     end
     return activities
   }
-
-  def update_behavior
-    data = process(read_attribute(:behavior))
-    write_attribute(:behavior, data)
-  end
 
   def behavior_jp
     case

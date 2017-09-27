@@ -10,13 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170925142235) do
+ActiveRecord::Schema.define(version: 20170926024713) do
 
   create_table "activities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
-    t.string   "behavior"
-    t.string   "task_id"
+    t.integer  "behavior_id"
+    t.integer  "object_id"
+    t.string   "update_from"
+    t.string   "update_to"
+    t.json     "meta"
     t.datetime "created_at"
+    t.index ["behavior_id"], name: "index_activities_on_behavior_id", using: :btree
     t.index ["user_id"], name: "index_activities_on_user_id", using: :btree
   end
 
@@ -117,6 +121,7 @@ ActiveRecord::Schema.define(version: 20170925142235) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
+  add_foreign_key "activities", "behaviors"
   add_foreign_key "activities", "users"
   add_foreign_key "tasks", "projects"
   add_foreign_key "tasks", "task_statuses"
