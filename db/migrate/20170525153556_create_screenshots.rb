@@ -3,6 +3,7 @@ class CreateScreenshots < ActiveRecord::Migration[5.0]
     create_table :screenshots do |t|
       t.string :uuid, :null => false
       t.string :src, :null => false
+      t.string :extension, :null => false
 
       t.timestamps
     end
