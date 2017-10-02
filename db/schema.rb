@@ -52,8 +52,8 @@ ActiveRecord::Schema.define(version: 20170928020713) do
     t.integer  "user_id"
     t.string   "subject"
     t.text     "description", limit: 65535
-    t.date     "start_at"
-    t.date     "end_at"
+    t.date     "start_on"
+    t.date     "end_on"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
   end
