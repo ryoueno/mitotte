@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(version: 20170928020713) do
   create_table "activities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
     t.integer  "behavior_id"
-    t.integer  "object_id"
+    t.integer  "target_id"
     t.string   "update_from"
     t.string   "update_to"
     t.json     "meta"

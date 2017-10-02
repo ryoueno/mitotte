@@ -1,13 +1,23 @@
 class Task < ApplicationRecord
   belongs_to :project
-  belongs_to :task_status
   has_many :schedules
 
+  # 初期のステータス
+  DEFAULT_STATUS = 'INITIAL'
+
+  # 未完了とみなされるステータス
   TODO_STATUSES = [
     'INITIAL',
     'PENNDING',
     'PROGLESS',
   ]
+
+  # 現状のステータスをアクティビティログから計算、なければデフォルトステータス
+  def status
+    activity = Activity.where_behavior('CHANGE_STATUS').where({target_id: self.id}).order('created_at desc').first
+    default_status_id = TaskStatus.where({name: DEFAULT_STATUS}).first.id
+    TaskStatus.find(activity&.update_to || default_status_id)
+  end
 
   def next_schedule_date
     s = self.schedules.where('date >= ?', Date.today).order(:date).first
@@ -33,7 +43,7 @@ class Task < ApplicationRecord
 
   # ステータスが作業すべき状態(todo) であるか
   def todo?
-    TODO_STATUSES.include?(self.task_status.name)
+    TODO_STATUSES.include?(self.status.name)
   end
 
   # 与えられた時間において、作業すべきかどうか

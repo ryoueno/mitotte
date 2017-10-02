@@ -29,8 +29,14 @@ Behavior.seed do |s|
   s.priority = 5
 end
 Behavior.seed do |s|
+  s.name = 'CHANGE_STATUS'
+  s.display = 'ステータス変更'
+  s.color_code = 'ccccff'
+  s.priority = 6
+end
+Behavior.seed do |s|
   s.name = 'DO_SOMETHING'
   s.display = '不明な状態'
   s.color_code = 'f4ff81'
-  s.priority = 6
+  s.priority = 7
 end

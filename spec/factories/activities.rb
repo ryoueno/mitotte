@@ -1,37 +1,89 @@
 FactoryGirl.define do
   factory :activity do
-    trait :update_task do
-      user_id 1
+    user
+
+    # behavior: RESTING
+    trait :resting do
+      after(:build) do |activity|
+        activity.behavior = FactoryGirl.create(:behavior, :resting)
+      end
     end
+
+    # behavior: WORKING
     trait :working do
-      name 'WORKING'
-      display '作業中'
-      color_code 'eeff41'
-      priority 2
+      after(:build) do |activity|
+        activity.behavior = FactoryGirl.create(:behavior, :working)
+      end
     end
+
+    # behavior: MOVING
     trait :moving do
-      name 'MOVING'
-      display '動作中'
-      color_code 'eeff41'
-      priority 3
+      after(:build) do |activity|
+        activity.behavior = FactoryGirl.create(:behavior, :moving)
+      end
     end
-    trait :lasy do
-      name 'LAZY'
-      display 'さぼり？'
-      color_code '3e2723'
-      priority 4
+
+    # behavior: LAZY
+    trait :lazy do
+      after(:build) do |activity|
+        activity.behavior = FactoryGirl.create(:behavior, :lazy)
+      end
     end
+
+    # behavior: RUNNING
     trait :running do
-      name 'RUNNING'
-      display '動作中'
-      color_code 'f4ff81'
-      priority 5
+      after(:build) do |activity|
+        activity.behavior = FactoryGirl.create(:behavior, :running)
+      end
     end
+
+    # behavior: CHANGE_STAUTS
+    trait :change_status_1_to_2 do
+      target_id 1
+      after(:build) do |activity|
+        activity.behavior = FactoryGirl.create(:behavior, :change_status)
+      end
+      update_from 1
+      update_to 2
+    end
+    trait :change_status_2_to_3 do
+      target_id 1
+      after(:build) do |activity|
+        activity.behavior = FactoryGirl.create(:behavior, :change_status)
+      end
+      update_from 2
+      update_to 3
+    end
+    trait :change_status_3_to_4 do
+      target_id 1
+      after(:build) do |activity|
+        activity.behavior = FactoryGirl.create(:behavior, :change_status)
+      end
+      update_from 3
+      update_to 4
+    end
+    trait :change_status_4_to_5 do
+      target_id 1
+      after(:build) do |activity|
+        activity.behavior = FactoryGirl.create(:behavior, :change_status)
+      end
+      update_from 4
+      update_to 5
+    end
+    trait :change_status_5_to_1 do
+      target_id 1
+      after(:build) do |activity|
+        activity.behavior = FactoryGirl.create(:behavior, :change_status)
+      end
+      update_from 5
+      update_to 1
+    end
+
+    # behavior: DO_SOMETHING
     trait :do_something do
-      name 'DO_SOMETHING'
-      display '不明な状態'
-      color_code 'f4ff81'
-      priority 6
+      after(:build) do |activity|
+        activity.behavior = FactoryGirl.create(:behavior, :do_something)
+      end
     end
   end
 end

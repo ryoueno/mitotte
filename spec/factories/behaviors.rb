@@ -30,11 +30,17 @@ FactoryGirl.define do
       color_code 'f4ff81'
       priority 5
     end
+    trait :change_status do
+      name 'CHANGE_STATUS'
+      display 'ステータス変更'
+      color_code 'ccccff'
+      priority 6
+    end
     trait :do_something do
       name 'DO_SOMETHING'
       display '不明な状態'
       color_code 'f4ff81'
-      priority 6
+      priority 7
     end
   end
 end

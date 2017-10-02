@@ -1,5 +1,6 @@
 class Activity < ApplicationRecord
   belongs_to :user
+  belongs_to :behavior
 
   @@second_per_group = 600
   COLOR_RESTIMG = "#f9fbe7"
@@ -9,6 +10,11 @@ class Activity < ApplicationRecord
   COLOR_RUNNING = "#f4ff81"
   COLOR_DO_SOMETHING = "#f4ff81"
   COLOR_DEFAULT = "#f6f6ff"
+
+  # behavior.nameで絞り込み
+  scope :where_behavior, -> status_name {
+    joins(:behavior).where("behaviors.name" => status_name)
+  }
 
   scope :aggregate, -> date {
     rows = find_by_sql(["SELECT count(*), MIN(behavior) as behavior, tasks.subject as subject, activities.created_at FROM activities LEFT JOIN tasks ON task_id = tasks.id where DATE(activities.created_at) = ? GROUP BY TRUNCATE(UNIX_TIMESTAMP(activities.created_at) / ?, 0)", date, @@second_per_group])
