@@ -8,8 +8,8 @@ class Project < ApplicationRecord
     self.tasks.count
   end
 
-  def todo_tasks(date: nil, time: nil, ignore_status: false)
-    self.tasks.select {|t| t.todo_at?(date: date, time: time, ignore_status: ignore_status)}
+  def todo_tasks(date: nil, time: nil, ignore_status: false, ignore_schedule: false)
+    self.tasks.select {|t| t.todo_at?(date: date, time: time, ignore_status: ignore_status, ignore_schedule: ignore_schedule)}
   end
 
   def progress
@@ -24,7 +24,7 @@ class Project < ApplicationRecord
   end
 
   def days
-    (self.end_at - self.start_at).to_i
+    (self.end_on - self.start_on).to_i
   end
 
   def hours
@@ -39,11 +39,23 @@ class Project < ApplicationRecord
     self.tasks.map {|t| t.seconds}.sum
   end
 
-  def todo_at?(date: nil, time: nil, ignore_status: false)
+  def todo_hours
+    self.todo_tasks.map {|t| t.hours}.sum
+  end
+
+  def todo_minutes
+    self.todo_tasks.map {|t| t.minutes}.sum
+  end
+
+  def todo_seconds
+    self.todo_tasks.map {|t| t.seconds}.sum
+  end
+
+  def todo_at?(date: nil, time: nil, ignore_status: false, ignore_schedule: false)
     date ||= Date.today
     time ||= Tod::TimeOfDay(Time.now)
     self.tasks.each do |t|
-      return true if t.todo_at?(date: date, time: time, ignore_status: ignore_status)
+      return true if t.todo_at?(date: date, time: time, ignore_status: ignore_status, ignore_schedule: ignore_schedule)
     end
     return false
   end

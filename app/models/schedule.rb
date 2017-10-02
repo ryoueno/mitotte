@@ -17,11 +17,11 @@ class Schedule < ApplicationRecord
   end
 
   def minutes
-    self.seconds / 60
+    (self.seconds.to_f / 60).ceil
   end
 
   def hours
-    self.seconds / (60 * 60)
+    (self.seconds.to_f / (60 * 60)).ceil
   end
 
   def todo_at?(time)
