@@ -1,6 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe Task, type: :model do
+  before do
+    create(:task_status, :initial)
+    create(:task_status, :pending)
+    create(:task_status, :progress)
+    create(:task_status, :done)
+    create(:task_status, :rejected)
+  end
+
   it 'has a valid factory' do
     expect(build(:task)).to be_valid
   end
@@ -19,21 +27,25 @@ RSpec.describe Task, type: :model do
 
   it 'make a judgment to do now' do
     task = create(:task)
-    task.update!(task_status_id: TaskStatus::where(:name => 'INITIAL').first.id)
+    create(:activity, :change_status_1_to_2)
     expect(task.todo_at?(time: Tod::TimeOfDay.new(19, 0, 0))).to be true
   end
 
-  context 'Make a judgement to do task itself' do
-    it 'return true when the status is [todo] value' do
-      task = create(:task)
-      task.update!(task_status_id: TaskStatus::where(:name => 'INITIAL').first.id)
-      expect(task.todo?).to be true
+  describe 'Make a judgement to do task itself' do
+    context 'status is [todo] value' do
+      it 'return true' do
+        task = create(:task)
+        create(:activity, :change_status_1_to_2, target_id: task.id)
+        expect(task.todo?).to be true
+      end
     end
 
-    it 'return false when the status is not [todo] value' do
-      task = create(:task)
-      task.update!(task_status_id: TaskStatus::where(:name => 'DONE').first.id)
-      expect(task.todo?).to be false
+    context 'status is not [todo] value' do
+      it 'return false' do
+        task = create(:task)
+        create(:activity, :change_status_1_to_2, target_id: task.id)
+        expect(task.todo?).to be false
+      end
     end
   end
 end
