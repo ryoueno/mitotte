@@ -3,7 +3,7 @@ TaskStatus.seed do |s|
   s.display = '初期'
 end
 TaskStatus.seed do |s|
-  s.name = 'PENNDING'
+  s.name = 'PENDING'
   s.display = 'しぶい'
 end
 TaskStatus.seed do |s|
