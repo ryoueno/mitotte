@@ -13,12 +13,12 @@
             <tr>
               <th class="lime-text text-darken-1 icon"><i class="material-icons">schedule</i></th>
               <th class="lime-text text-darken-1">開始日</th>
-              <td><%= @project.start_at.strftime("%Y年%m月%d日") %></td>
+              <td><%= @project.start_on.strftime("%Y年%m月%d日") %></td>
             </tr>
             <tr>
               <th class="lime-text text-darken-1 icon"><i class="material-icons">schedule</i></th>
               <th class="lime-text text-darken-1">終了日</th>
-              <td><%= @project.end_at.strftime("%Y年%m月%d日") %></td>
+              <td><%= @project.end_on.strftime("%Y年%m月%d日") %></td>
             </tr>
           </table>
         </td>
@@ -63,7 +63,7 @@
               <%= task.date.strftime("%Y年%m月%d日") %>
             </td>
             <td>
-              <%= task.task.task_status.name %>
+              <%= task.task.status.display %>
             </td>
             <td>
               <%= task.task.subject %>

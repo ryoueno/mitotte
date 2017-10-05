@@ -1,65 +1,50 @@
 require 'rails_helper'
 
 RSpec.describe Project, type: :model do
-  it 'has a valid factory' do
-    expect(build(:project)).to be_valid
+  context 'get the first record' do
+    before { @project = Project.first }
+    it { expect(@project.id).to be_a_kind_of(Integer) }
+    it { expect(@project.subject).to be_a_kind_of(String) }
+    it { expect(@project.description).to be_a_kind_of(String) }
+    it { expect(@project.start_on).to be_a_kind_of(Date) }
+    it { expect(@project.end_on).to be_a_kind_of(Date) }
+    it { expect(@project.days).to eq 20 }
   end
 
-  context 'there are some tasks' do
-    it 'is available the number of tasks' do
-      expect(create(:project).tasks.count).to eq 1
+  context 'get some tasks from first record' do
+    before { @project = Project.first }
+    it { expect(@project.tasks.count).to eq 5 }
+    context 'has some schedules' do
+      before { @project = Project.first }
+      it { expect(@project.hours).to eq 160 }
+      it { expect(@project.minutes).to eq 9595 }
+      it { expect(@project.seconds).to eq 575700 }
     end
+  end
 
-    context 'countable' do
-      it 'has one task to do' do
-        project = create(:project)
-        tasks = project.tasks
-        task = tasks.first
-        task.update(:task_status_id => TaskStatus::where(:name => 'INITIAL').first.id)
-        expect(project.todo_tasks(time: Tod::TimeOfDay.new(9, 0, 0)).count).to eq 1
-      end
-      it 'has no task to do' do
-        project = create(:project)
-        tasks = project.tasks
-        task = tasks.first
-        task.update(:task_status_id => TaskStatus::where(:name => 'DONE').first.id)
-        expect(project.todo_tasks(time: Tod::TimeOfDay.new(9, 0, 0)).count).to eq 0
-      end
+  context 'get tasks to do from first record' do
+    before { @project = Project.first }
+    it { expect(@project.todo_tasks.count).to eq 2}
+    context 'has some schedules' do
+      before { @project = Project.first }
+      it { expect(@project.todo_hours).to eq 64 }
+      it { expect(@project.todo_minutes).to eq 3838 }
+      it { expect(@project.todo_seconds).to eq 230280 }
+    end
+  end
+
+  context 'make a judgement' do
+    before { @project = Project.first }
+    context 'in consideration of task status' do
+      it { expect(@project.todo_at?(ignore_schedule: true)).to eq true }
+    end
+    context 'in consideration of schedules' do
+      it { expect(@project.todo_at?(ignore_status: true)).to eq true }
+    end
+    context 'in consideration of both task and schedules' do
+      it { expect(@project.todo_at?).to eq true }
     end
   end
 
   it 'is available the values indicative progress'
-
-  it 'is available number of days' do
-    expect(create(:project).days).to eq 10
-  end
-
-  it 'is available time in hours' do
-    expect(create(:project).hours).to eq 8
-  end
-
-  it 'is available time in minutes' do
-    expect(create(:project).minutes).to eq 480
-  end
-
-  it 'is available time in seconds' do
-    expect(create(:project).seconds).to eq 28800
-  end
-
-  context 'Make a judgment' do
-    it 'returns true when its status is [todo] now' do
-      project = create(:project)
-      tasks = project.tasks
-      task = tasks.first
-      task.update(:task_status_id => TaskStatus::where(:name => 'INITIAL').first.id)
-      expect(project.todo_at?(time: Tod::TimeOfDay.new(9, 0, 0))).to be true
-    end
-    it 'returns false when its status is not [todo] now' do
-      project = create(:project)
-      tasks = project.tasks
-      task = tasks.first
-      task.update(:task_status_id => TaskStatus::where(:name => 'DONE').first.id)
-      expect(project.todo_at?(time: Tod::TimeOfDay.new(9, 0, 0))).to be false
-    end
-  end
 end

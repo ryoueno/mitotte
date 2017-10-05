@@ -1,18 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  it 'has a valid factory' do
-    expect(build(:user)).to be_valid
+  context 'get the first record' do
+    before { @user = User.first }
+    it { expect(@user.id).to be_a_kind_of(Integer) }
+    it { expect(@user.name).to be_a_kind_of(String) }
+    it { expect(@user.email).to be_a_kind_of(String) }
   end
-
-  it 'is invalid within 6 characters' do
-    user = build(:user)
-    user.password = "test"
-    expect(user).to be_invalid
-  end
-
-  it 'is set keyword before save' do
-    user = create(:user)
-    expect(User.keywords.include?(user.keyword)).to be true
-  end
+  it 'set keyword before save'
 end
