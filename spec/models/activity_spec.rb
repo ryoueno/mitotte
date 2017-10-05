@@ -1,14 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe Activity, type: :model do
-  it 'has a valid factory' do
-    expect(build(:activity, :resting)).to be_valid
-  end
-
-  context 'having at least one activity' do
-    before { create(:activity, :resting) }
-    it 'is narrowable with behavior name' do
-      expect(Activity.where_behavior('RESTING').first.behavior.name).to eq 'RESTING'
-    end
+  context 'get the first record' do
+    before { @activity = Activity.first }
+    it { expect(@activity.id).to be_a_kind_of(Integer) }
+    it { expect(@activity.user_id).to be_a_kind_of(Integer) }
+    it { expect(@activity.behavior_id).to be_a_kind_of(Integer) }
+    it { expect(@activity.target_id).to be_a_kind_of(Integer) }
+    it { expect(@activity.update_from).to be_a_kind_of(String) }
+    it { expect(@activity.update_to).to be_a_kind_of(String) }
+    it { expect(@activity.behavior).to be_valid }
   end
 end
