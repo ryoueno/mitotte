@@ -9,6 +9,13 @@ class Activity < ApplicationRecord
     joins(:behavior).where("behaviors.name" => status_name)
   }
 
+  # 指定された日の作業ステータス一覧を集計して配列で返す
+  # フォーマット
+  #  [
+  #    '10:00' => Activity row
+  #    '12:00' => Activity row
+  #  ]
+  #
   scope :aggregate, -> date {
     rows = find_by_sql(["SELECT count(*), MIN(behavior) as behavior, tasks.subject as subject, activities.created_at FROM activities LEFT JOIN tasks ON task_id = tasks.id where DATE(activities.created_at) = ? GROUP BY TRUNCATE(UNIX_TIMESTAMP(activities.created_at) / ?, 0)", date, @@second_per_group])
     activities = {}
@@ -24,9 +31,4 @@ class Activity < ApplicationRecord
     end
     return activities
   }
-
-  def process(behavior)
-    behavior
-  end
-
 end
