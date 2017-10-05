@@ -81,9 +81,9 @@ class TasksController < ApplicationController
     schedule_params.each do |schedule_id, time_sets|
       tmp = []
       time_sets[:time].each_value do |time_set|
-        if time_set[:start_at].present? and time_set[:end_at].present?
-          time_set[:end_at], time_set[:start_at] = time_set[:start_at], time_set[:end_at] if time_set[:start_at] > time_set[:end_at]
-          tmp.push({time_set[:start_at] => time_set[:end_at]})
+        if time_set[:start_on].present? and time_set[:end_on].present?
+          time_set[:end_on], time_set[:start_on] = time_set[:start_on], time_set[:end_on] if time_set[:start_on] > time_set[:end_on]
+          tmp.push({time_set[:start_on] => time_set[:end_on]})
         end
       end
       Schedule.find(schedule_id).update(:time => tmp)
@@ -125,6 +125,6 @@ class TasksController < ApplicationController
     end
 
     def divide_schedule_date(project)
-      (project.start_at..project.end_at).map {|date| {date: date}}
+      (project.start_on..project.end_on).map {|date| {date: date}}
     end
 end
