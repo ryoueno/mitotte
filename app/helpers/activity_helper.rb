@@ -3,6 +3,8 @@ module ActivityHelper
   include Magick
 
   def generate_activity_table(activities, date, project)
+    behavior_colors = Hash[Behavior.all.map { |row| [row.name, "##{row.color_code}"] }]
+    behavior_colors['DEFAULT'] = "#ebedf0"
     x_label_w = 20
     y_label_h = 20
     footer_h = 60
@@ -20,12 +22,13 @@ module ActivityHelper
     c_num_w.times do |hour|
       c_num_h.times do |minute|
         if activities[sprintf("%02d:%02d", hour + 1, minute * 10)]
-          dr.fill(activities[sprintf("%02d:%02d", hour + 1, minute * 10)].behavior_color)
+          #dr.fill(activities[sprintf("%02d:%02d", hour + 1, minute * 10)].behavior.color_code)
+          dr.fill(behavior_colors['LAZY'])
         elsif project.todo_at?(date: date, time: Tod::TimeOfDay.new(hour, minute))
           #TODO
-          dr.fill(Activity::COLOR_LAZY)
+          dr.fill(behavior_colors['LAZY'])
         else
-          dr.fill(Activity::COLOR_DEFAULT)
+          dr.fill(behavior_colors['DEFAULT'])
         end
         dr.rectangle(
           x_label_w + f_m + (hour*(c_m + c_w)),
@@ -36,7 +39,7 @@ module ActivityHelper
       end
     end
 
-    # Label
+    # # Label
     dr.font = 'DejaVu-Sans'
     dr.stroke('transparent')
     dr.fill('#666')
@@ -55,13 +58,13 @@ module ActivityHelper
     dr.text(16, 196, "60")
 
     # Footer
-    dr.fill(Activity::COLOR_RUNNING)
+    dr.fill(behavior_colors['RUNNING'])
     dr.rectangle(50, 220, 50 + c_w, 220 + c_h)
-    dr.fill(Activity::COLOR_RESTIMG)
+    dr.fill(behavior_colors['RESTING'])
     dr.rectangle(361, 220, 361 + c_w, 220 + c_h)
-    dr.fill(Activity::COLOR_DEFAULT)
+    dr.fill(behavior_colors['DEFAULT'])
     dr.rectangle(50, 246, 50 + c_w, 246 + c_h)
-    dr.fill(Activity::COLOR_LAZY)
+    dr.fill(behavior_colors['LAZY'])
     dr.rectangle(361, 246, 361 + c_w, 246 + c_h)
 
     dr.fill('#666')
@@ -87,7 +90,7 @@ module ActivityHelper
     }
     g.legend_margin = 100
     g.marker_font_size = 12
-    progress = ProgressGraph.new(@project.start_at, @project.end_at)
+    progress = ProgressGraph.new(@project.start_on, @project.end_on)
     g.labels = progress.get_label
 
     # グラフを大きく見せるために仕方なく
