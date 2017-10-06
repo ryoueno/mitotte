@@ -1,2 +1,0 @@
-class TestImage < ApplicationRecord
-end
