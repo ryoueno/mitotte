@@ -81,6 +81,7 @@ group :development do
   gem "launchy"
   gem "selenium-webdriver"
   gem "shoulda-matchers"
+  gem 'rack-mini-profiler'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
