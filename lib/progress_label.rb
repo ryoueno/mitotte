@@ -1,4 +1,4 @@
-class ProgressGraph
+class ProgressLabel
   attr_reader :now_position
   attr_accessor :max_period, :now_date
 

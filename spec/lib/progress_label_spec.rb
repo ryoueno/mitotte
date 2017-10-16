@@ -1,24 +1,24 @@
 require 'rails_helper'
 
-RSpec.describe ProgressGraph do
-  context 'instantiate ProgressGraph' do
+RSpec.describe ProgressLabel do
+  context 'instantiate ProgressLabel' do
     it 'raise exception to inconsistent date' do
-      expect{ProgressGraph.new(1.days.since.to_date, Date.today)}.to raise_error(ArgumentError)
+      expect{ProgressLabel.new(1.days.since.to_date, Date.today)}.to raise_error(ArgumentError)
     end
 
     it 'is available max_period as default value' do
-      expect(ProgressGraph.new(1.days.ago.to_date, Date.today).max_period).to eq 10
+      expect(ProgressLabel.new(1.days.ago.to_date, Date.today).max_period).to eq 10
     end
 
     it 'is available now_position as default value zero.' do
-      expect(ProgressGraph.new(1.days.ago.to_date, Date.today).now_position).to eq 0
+      expect(ProgressLabel.new(1.days.ago.to_date, Date.today).now_position).to eq 0
     end
   end
 
-  context 'Set up datetime list using label of graph' do
+  context 'Set up datetime list using label of Label' do
     context 'top date pattern' do
       context 'Less periods than max_period' do
-        progress = ProgressGraph.new(Date.today, 5.days.since.to_date)
+        progress = ProgressLabel.new(Date.today, 5.days.since.to_date)
         it 'is available hash object cover to given dates' do
           expect(progress.gruff_period.size).to eq 5 + 1
         end
@@ -37,7 +37,7 @@ RSpec.describe ProgressGraph do
       end
 
       context 'More periods than max_period' do
-        progress = ProgressGraph.new(Date.today, 15.days.since.to_date)
+        progress = ProgressLabel.new(Date.today, 15.days.since.to_date)
         it 'is available hash object equal to max_period (10)' do
           expect(progress.gruff_period.size).to eq progress.max_period
         end
@@ -58,7 +58,7 @@ RSpec.describe ProgressGraph do
 
     context 'bottom date pattern' do
       context 'Less periods than max_period' do
-        progress = ProgressGraph.new(5.days.ago.to_date, Date.today)
+        progress = ProgressLabel.new(5.days.ago.to_date, Date.today)
         it 'is available hash object cover to given dates' do
           expect(progress.gruff_period.size).to eq 5 + 1
         end
@@ -77,7 +77,7 @@ RSpec.describe ProgressGraph do
       end
 
       context 'More periods than max_period' do
-        progress = ProgressGraph.new(15.days.ago.to_date, Date.today)
+        progress = ProgressLabel.new(15.days.ago.to_date, Date.today)
         it 'is available hash object equal to max_period (10)' do
           expect(progress.gruff_period.size).to eq progress.max_period
         end
@@ -98,7 +98,7 @@ RSpec.describe ProgressGraph do
 
     context 'middle date pattern' do
       context 'Less periods than max_period' do
-        progress = ProgressGraph.new(3.days.ago.to_date, 3.days.since.to_date)
+        progress = ProgressLabel.new(3.days.ago.to_date, 3.days.since.to_date)
         it 'is available hash object cover to given dates' do
           expect(progress.gruff_period.size).to eq 3 + 1 + 3
         end
@@ -117,7 +117,7 @@ RSpec.describe ProgressGraph do
       end
 
       context 'More periods than max_period' do
-        progress = ProgressGraph.new(7.days.ago.to_date, 7.days.since.to_date)
+        progress = ProgressLabel.new(7.days.ago.to_date, 7.days.since.to_date)
         it 'is available hash object equal to max_period (10)' do
           expect(progress.gruff_period.size).to eq progress.max_period
         end
