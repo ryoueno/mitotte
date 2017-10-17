@@ -12,15 +12,22 @@ class Project < ApplicationRecord
     self.tasks.select {|t| t.todo_at?(date: date, time: time, ignore_status: ignore_status, ignore_schedule: ignore_schedule)}
   end
 
-  def progress
-    prg = []
-    # prg[0] = 0
-    # gruff_period.each_with_index do |t, idx|
-    #   #prg[idx + 1] = idx * 200
-    #   prg[idx + 1] = idx * 200
-    # end
-    prg = [0, 20, 100, 100, 120, 330, 1000]
-    prg
+  # Return Progress data in array.
+  # Set zero if given date object is invalid.
+  # @param [] date label in array, e.g. [0 => Date, 1 => Date, 2 => Date...]
+  # @return [Array] progress data
+  def progress(date_label)
+    progress = []
+    todo_minutes_all = self.todo_minutes(date: self.start_on, time: Tod::TimeOfDay.new(0, 0), ignore_schedule: true).to_f
+    date_label.each do |date|
+      if date.instance_of?(Date)
+        todo_minutes_at_that_time = self.todo_minutes(date: date, time: Tod::TimeOfDay.new(23, 59), ignore_schedule: true)
+        progress.push(((todo_minutes_all - todo_minutes_at_that_time).to_f) / todo_minutes_all)
+      else
+        progress.push(0)
+      end
+    end
+    progress
   end
 
   def days
@@ -39,16 +46,16 @@ class Project < ApplicationRecord
     self.tasks.map {|t| t.seconds}.sum
   end
 
-  def todo_hours
-    self.todo_tasks.map {|t| t.hours}.sum
+  def todo_hours(date: nil, time: nil, ignore_status: false, ignore_schedule: false)
+    self.todo_tasks(date: date, time: time, ignore_status: ignore_status, ignore_schedule: ignore_schedule).map {|t| t.hours}.sum
   end
 
-  def todo_minutes
-    self.todo_tasks.map {|t| t.minutes}.sum
+  def todo_minutes(date: nil, time: nil, ignore_status: false, ignore_schedule: false)
+    self.todo_tasks(date: date, time: time, ignore_status: ignore_status, ignore_schedule: ignore_schedule).map {|t| t.minutes}.sum
   end
 
-  def todo_seconds
-    self.todo_tasks.map {|t| t.seconds}.sum
+  def todo_seconds(date: nil, time: nil, ignore_status: false, ignore_schedule: false)
+    self.todo_tasks(date: date, time: time, ignore_status: ignore_status, ignore_schedule: ignore_schedule).map {|t| t.seconds}.sum
   end
 
   def todo_at?(date: nil, time: nil, ignore_status: false, ignore_schedule: false)

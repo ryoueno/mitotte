@@ -46,5 +46,15 @@ RSpec.describe Project, type: :model do
     end
   end
 
-  it 'is available the values indicative progress'
+  context 'get values indicative progress' do
+    before { @project = Project.first }
+    context 'passed invalid date object' do
+      it { expect(@project.progress([])).to eq [] }
+      it { expect(@project.progress([true, 0, '1'])).to eq [0, 0, 0] }
+    end
+    context 'passed valid date object' do
+      it {expect(@project.progress([3.days.ago.to_date, 2.days.ago.to_date, Date.yesterday])).to eq [0.0, 0.0, 0.6]}
+      it {expect(@project.progress([Date.today, Date.tomorrow, 2.days.since.to_date])).to eq [0.6, 0.6, 0.6]}
+    end
+  end
 end

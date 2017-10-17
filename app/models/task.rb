@@ -12,9 +12,16 @@ class Task < ApplicationRecord
     'PROGLESS',
   ]
 
-  # 現状のステータスをアクティビティログから計算、なければデフォルトステータス
-  def status
-    activity = Activity.where_behavior('CHANGE_STATUS').where({target_id: self.id}).order('created_at desc').first
+  # ある時点のステータスをアクティビティログから計算、なければデフォルトステータス
+  def status(date: nil, time: nil)
+    date ||= Date.today
+    time ||= Tod::TimeOfDay(Time.now)
+    activity = Activity
+      .where_behavior('CHANGE_STATUS')
+      .where({target_id: self.id})
+      .where('created_at <= ?', "#{date.to_s} #{time.to_s}")
+      .order('created_at desc')
+      .first
     default_status_id = TaskStatus.where({name: DEFAULT_STATUS}).first.id
     TaskStatus.find(activity&.update_to || default_status_id)
   end
@@ -42,8 +49,8 @@ class Task < ApplicationRecord
   end
 
   # ステータスが作業すべき状態(todo) であるか
-  def todo?
-    TODO_STATUSES.include?(self.status.name)
+  def todo?(date: nil, time: nil)
+    TODO_STATUSES.include?(self.status(date: date, time: time).name)
   end
 
   # 与えられた時間において、作業すべきかどうか
@@ -67,7 +74,7 @@ class Task < ApplicationRecord
     if (ignore_status)
       return is_todo
     else
-      return self.todo? && is_todo
+      return self.todo?(date: date,time: time) && is_todo
     end
   end
 end
