@@ -16,13 +16,14 @@ class Project < ApplicationRecord
   # Set zero if given date object is invalid.
   # @param [] date label in array, e.g. [0 => Date, 1 => Date, 2 => Date...]
   # @return [Array] progress data
-  def progress(date_label)
+  def progress(date_label, max_data = 1)
     progress = []
     todo_minutes_all = self.todo_minutes(date: self.start_on, time: Tod::TimeOfDay.new(0, 0), ignore_schedule: true).to_f
-    date_label.each do |date|
+    date_label.each do |idx, date|
+      date = date.to_date
       if date.instance_of?(Date)
         todo_minutes_at_that_time = self.todo_minutes(date: date, time: Tod::TimeOfDay.new(23, 59), ignore_schedule: true)
-        progress.push(((todo_minutes_all - todo_minutes_at_that_time).to_f) / todo_minutes_all)
+        progress.push(((todo_minutes_all - todo_minutes_at_that_time).to_f) / todo_minutes_all * max_data)
       else
         progress.push(0)
       end
