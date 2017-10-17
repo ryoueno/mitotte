@@ -26,7 +26,7 @@
       <tr>
         <td>
           <h5>残りのタスク数</h5>
-          <span class="lime-text text-darken-1"><%= @project.todo_tasks.count %></span>
+          <span class="lime-text text-darken-1"><%= @project.todo_tasks(date: Date.today, ignore_schedule: true).count %></span>
         </td>
       </tr>
     </table>
