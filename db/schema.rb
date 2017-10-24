@@ -93,6 +93,7 @@ ActiveRecord::Schema.define(version: 20170928020713) do
     t.string   "name",                                null: false
     t.string   "email",                  default: "", null: false
     t.string   "uuid",                                null: false
+    t.string   "slack_name",             default: "", null: false
     t.string   "keyword",                default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
