@@ -37,7 +37,7 @@ users.each do |u|
     when start_on_2..end_on_2
       Schedule.seed do |s|
         s.task_id = 1 + ((u.id  - 1) * 5)
-        s.date = Date.yesterday
+        s.date = date
         s.time = [
           {"21:00" => "23:00"},
         ]
@@ -47,7 +47,7 @@ users.each do |u|
     when start_on_3..end_on_3
       Schedule.seed do |s|
         s.task_id = 2 + ((u.id  - 1) * 5)
-        s.date = Date.yesterday
+        s.date = date
         s.time = [
           {"21:00" => "23:00"},
         ]
@@ -57,7 +57,7 @@ users.each do |u|
     when start_on_4..end_on_4
       Schedule.seed do |s|
         s.task_id = 3 + ((u.id  - 1) * 5)
-        s.date = Date.yesterday
+        s.date = date
         s.time = [
           {"21:00" => "23:00"},
         ]
@@ -67,7 +67,7 @@ users.each do |u|
     when start_on_5..end_on_5
       Schedule.seed do |s|
         s.task_id = 4 + ((u.id  - 1) * 5)
-        s.date = Date.yesterday
+        s.date = date
         s.time = [
           {"21:00" => "23:00"},
         ]
@@ -77,7 +77,7 @@ users.each do |u|
     when start_on_1..end_on_1
       Schedule.seed do |s|
         s.task_id = 5 + ((u.id  - 1) * 5)
-        s.date = Date.yesterday
+        s.date = date
         s.time = [
           {"21:00" => "23:00"},
         ]
@@ -87,7 +87,7 @@ users.each do |u|
     when start_on_s..end_on_s
       Schedule.seed do |s|
         s.task_id = 6 + ((u.id  - 1) * 5)
-        s.date = Date.yesterday
+        s.date = date
         s.time = [
           {"21:00" => "23:00"},
         ]
