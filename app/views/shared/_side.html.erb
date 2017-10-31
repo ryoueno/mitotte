@@ -13,6 +13,11 @@
                         <ul>
                             <% if user_signed_in? %>
                             <li>
+                                <%= link_to edit_user_registration_path do %>
+                                    <i class="material-icons">lock</i>パスワード変更
+                                <% end %>
+                            </li>
+                            <li>
                                 <%= link_to destroy_user_session_path, method: :delete do %>
                                     <i class="material-icons">launch</i>ログアウト
                                 <% end %>
@@ -39,7 +44,7 @@
                             <% current_user.projects.each do |project| %>
                             <li>
                                 <%= link_to project do %>
-                                    <i class="material-icons">label_outline</i><%= project.subject.truncate(14) %>
+                                    <i class="material-icons">label_outline</i><%= project.subject.truncate(11) %>
                                 <% end %>
                             </li>
                             <% end %>
@@ -56,6 +61,7 @@
                 <div class="row">
                     <div class="col s12 m12">
                         <ul>
+                            <% if current_user.projects.first %>
                             <li>
                                 <%= link_to activity_path current_user.projects.first.id, *Date.today.strftime("%Y %m %d").split(" ") do %>
                                     <i class="material-icons">signal_cellular_4_bar</i>本日の作業記録
@@ -66,6 +72,7 @@
                                     <i class="material-icons">signal_cellular_null</i>昨日の作業記録
                                 <% end %>
                             </li>
+                            <% end %>
                         </ul>
                     </div>
                 </div>

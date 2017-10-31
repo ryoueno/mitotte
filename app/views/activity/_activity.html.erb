@@ -26,7 +26,7 @@
       <tr>
         <td>
           <h5>残りのタスク数</h5>
-          <span class="lime-text text-darken-1"><%= @project.todo_tasks.count %></span>
+          <span class="lime-text text-darken-1"><%= @project.todo_tasks(date: Date.today, ignore_schedule: true).count %></span>
         </td>
       </tr>
     </table>
@@ -37,12 +37,5 @@
   <div class="chart">
   <img width="600" style="border:1px solid" src='/images/projects/<%= "#{@project.id}_#{@the_day.strftime('%Y%m%d')}" %>.png'>
   <div>
-  <% @activities.each do |time, activity| %>
-    <div>
-      <span><%= "【#{time}】" %></span>
-      <span><%= "TODO" if @project.todo_at?(date: @the_day, time: time_of_day(time)) %></span>
-      <span><%= activity.behavior if activity.present? %></span>
-    </div>
-  <% end %>
   </div>
 </div>

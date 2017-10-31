@@ -13,6 +13,10 @@ class User < ApplicationRecord
     self
   end
 
+  def activity_image
+    root_url(only_path: false)
+  end
+
   def self.keywords
     @@keywords
   end

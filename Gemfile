@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.0', '>= 5.0.0.1'
 # Resque for running tasks with redis in the background.
@@ -81,6 +80,7 @@ group :development do
   gem "launchy"
   gem "selenium-webdriver"
   gem "shoulda-matchers"
+  gem 'rack-mini-profiler'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

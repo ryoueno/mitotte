@@ -22,8 +22,7 @@ module ActivityHelper
     c_num_w.times do |hour|
       c_num_h.times do |minute|
         if activities[sprintf("%02d:%02d", hour + 1, minute * 10)]
-          #dr.fill(activities[sprintf("%02d:%02d", hour + 1, minute * 10)].behavior.color_code)
-          dr.fill(behavior_colors['LAZY'])
+          dr.fill('#' + activities[sprintf("%02d:%02d", hour + 1, minute * 10)].behavior.color_code)
         elsif project.todo_at?(date: date, time: Tod::TimeOfDay.new(hour, minute))
           #TODO
           dr.fill(behavior_colors['LAZY'])
@@ -90,14 +89,15 @@ module ActivityHelper
     }
     g.legend_margin = 100
     g.marker_font_size = 12
-    progress = ProgressGraph.new(@project.start_on, @project.end_on)
-    g.labels = progress.get_label
+    progress_label = ProgressLabel.new(@project.start_on, @project.end_on)
+    g.labels = progress_label.get_label
 
     # グラフを大きく見せるために仕方なく
-    g.data :Dammy, (0..g.labels.count - 1).to_a.map {|d| d * 200}
+    dummy_data = (0..g.labels.count - 1).to_a.map {|d| d * 200}
+    g.data :Dammy, dummy_data
 
     # 進捗データ
-    g.data :TODO, @project.progress
+    g.data :TODO, @project.progress(progress_label.get_label, dummy_data.last)
 
     g.font = 'DejaVu-Sans'
     save_path = Rails.root.join(App::Application.config.project_graph_path, "#{@project.id}_#{@the_day.strftime('%Y%m%d')}.png")
@@ -111,7 +111,7 @@ module ActivityHelper
     icon.resize!(60, 40)
     img = img.crop(Magick::SouthEastGravity, 680, 450)
     graph_width = 680 #推定ベース画像サイズ
-    img.composite!(icon, progress.now_position * graph_width / progress.max_period, 300, Magick::OverCompositeOp)
+    img.composite!(icon, progress_label.now_position * graph_width / progress_label.max_period, 300, Magick::OverCompositeOp)
 
     # 追加描画
     img.write(save_path)
