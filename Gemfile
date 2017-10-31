@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+gem 'therubyracer', platforms: :ruby
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.0', '>= 5.0.0.1'
 # Resque for running tasks with redis in the background.
