@@ -35,7 +35,7 @@
         <td>
           <h5>ステータス</h5>
           <span class="lime-text text-darken-1">
-            <%= @task.status.name %>
+            <%= @task.status.display %>
           </span>
         </td>
       </tr>
@@ -52,7 +52,7 @@
   <div class="row">
     <%= form_for(@task) do |f| %>
       <div class="input-field col s12">
-        <%= f.select :status, options_for_select(@all_status, :selected => @task.status.id) %>
+        <%= f.select :status, options_for_select(@all_status.pluck(:display, :id), :selected => @task.status.id) %>
         <label>ステータス</label>
       </div>
       <div class="input-field col s12 right-align">

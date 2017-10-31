@@ -12,7 +12,7 @@ class TasksController < ApplicationController
   # GET /tasks/1
   # GET /tasks/1.json
   def show
-    @all_status = TaskStatus.get
+    @all_status = TaskStatus.all
   end
 
   # GET /tasks/new
