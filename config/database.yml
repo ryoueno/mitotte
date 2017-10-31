@@ -27,6 +27,7 @@ test:
   database: <%= ENV['DB_TEST_NAME'] %>
 
 production:
+  <<: *default
   username: <%= ENV['DB_PRD_USERNAME'] %>
   password: <%= ENV['DB_PRD_PASSWORD'] %>
   host: <%= ENV['DB_PRD_HOST'] %>
