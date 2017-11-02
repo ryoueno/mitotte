@@ -76,7 +76,7 @@ module ActivityHelper
     # 描画、保存
     dr.draw(canvas)
 
-    canvas.write(Rails.root.join(App::Application.config.activity_graph_path, "#{project.user.id}_#{date.strftime('%Y%m%d')}.png"))
+    canvas.write(Rails.root.join(App::Application.config.activity_graph_path, "#{project.user.id}_#{project.id}_#{date.strftime('%Y%m%d')}.png"))
   end
 
   def generate_progress_graph
@@ -100,7 +100,7 @@ module ActivityHelper
     g.data :TODO, @project.progress(progress_label.get_label, dummy_data.last)
 
     g.font = 'DejaVu-Sans'
-    save_path = Rails.root.join(App::Application.config.project_graph_path, "#{@project.id}_#{@the_day.strftime('%Y%m%d')}.png")
+    save_path = Rails.root.join(App::Application.config.project_graph_path, "#{@project.user.id}_#{@project.id}_#{@the_day.strftime('%Y%m%d')}.png")
     g.write(save_path)
 
     # グラフを編集
