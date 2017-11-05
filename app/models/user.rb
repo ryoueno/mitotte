@@ -6,7 +6,6 @@ class User < ApplicationRecord
   before_save :set_keyword
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
-  attr_accessor :projects
 
   def set_keyword
     self.keyword = @@keywords.sample if not self.keyword

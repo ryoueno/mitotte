@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(version: 20170928020713) do
     t.date     "end_on"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+    t.index ["user_id"], name: "index_projects_on_user_id", using: :btree
   end
 
   create_table "schedules", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -112,5 +113,6 @@ ActiveRecord::Schema.define(version: 20170928020713) do
 
   add_foreign_key "activities", "behaviors"
   add_foreign_key "activities", "users"
+  add_foreign_key "projects", "users"
   add_foreign_key "tasks", "projects"
 end
