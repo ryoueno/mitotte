@@ -7,7 +7,7 @@ namespace :slack do
       the_day = Date.yesterday
 
       # 全員の進捗を１つのチャンネルに送信
-      users = User.where({:id => 1})
+      users = User.all
       users.each do |user|
         activities = user.activities.aggregate(the_day)
 
@@ -16,7 +16,7 @@ namespace :slack do
         if(Schedule.yesterdays_users_schedules(user.id).empty?)
           body = "実施予定の作業がありません。今日はお休みです。"
         else
-          body = "頑張れ〜"
+          body = "#{ENV['APP_FQDN']}/images/activities/#{user.id}_#{user.projects.first.id}_#{the_day.strftime('%Y%m%d')}.png"
         end
 
         Resque.enqueue(SendToSlack, ENV['SLACK_PUBLIC_CHANNEL'], title + body)
