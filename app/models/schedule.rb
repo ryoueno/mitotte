@@ -7,6 +7,10 @@ class Schedule < ApplicationRecord
     joins({:task => :project}).where("projects.user_id" => user_id, :date => Date.today)
   }
 
+  scope :yesterdays_users_schedules, -> user_id {
+    joins({:task => :project}).where("projects.user_id" => user_id, :date => Date.yesterday)
+  }
+
   def time
     time_sets = JSON.parse self.time_before_type_cast
     time_sets.map {|time| ScheduleTime.new(time) }

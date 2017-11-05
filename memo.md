@@ -5,3 +5,4 @@
 * `whenever` で内容を確認
 * `/etc/init.d/cron start` で `cron` 起動
 * `/etc/init.d/cron status` で確認
+* `bin/resque start` でタスクスタート
