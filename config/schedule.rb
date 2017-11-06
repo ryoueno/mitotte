@@ -1,7 +1,7 @@
 #!/bin/env ruby
 # encoding: utf-8
 
-set :output, '/usr/src/app/log/crontab.log'
+set :output, 'log/cron.log'
 ENV.each { |k, v| env(k, v) }
 
 # every 1.minute do
@@ -11,4 +11,8 @@ ENV.each { |k, v| env(k, v) }
 
 every 1.minute do
   rake "slack:send_result", :environment => :development
+end
+
+every 1.day, :at => '8:00 am' do
+  rake "slack:send_result", :environment => :production
 end
