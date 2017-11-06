@@ -5,7 +5,7 @@ class ActivityController < ApplicationController
     @project = Project.find(params[:project_id])
     @user = @project.user
     @the_day = Date.new(params[:year].to_i, params[:month].to_i, params[:day].to_i)
-    @activities = @user.activities.aggregate @the_day
+    @activities = @user.activities.aggregate(@user.id, @the_day)
 
     # 進捗グラフ作成
     view_context.generate_progress_graph

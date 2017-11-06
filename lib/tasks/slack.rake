@@ -9,7 +9,7 @@ namespace :slack do
       # 全員の進捗を１つのチャンネルに送信
       users = User.all
       users.each do |user|
-        activities = user.activities.aggregate(the_day)
+        activities = user.activities.aggregate(user.id, the_day)
 
         title = "#{user.name}(@#{user.slack_name}) さんの#{the_day.strftime('%m月%d日')}の作業状況\n"
 
