@@ -2,6 +2,13 @@
   <%= render 'shared/side' %>
 <% end %>
 <main>
+  <% flash.each do |key, value| %>
+    <div class="card light-blue accent-2">
+      <div class="card-content white-text">
+        <p><%= value %></p>
+      </div>
+    </div>
+  <% end %>
   <h4><%= @project.subject %></h4>
   <p class="lime-text text-darken-1"><%= @project.description %></p>
 
