@@ -12,7 +12,13 @@ module TasksHelper
 
   def select_time
     (0..23).map do |i|
-      [sprintf("%02d:00", i),sprintf("%02d:00", i)]
+      [sprintf("%02d:00", i), sprintf("%02d:00", i)]
+    end
+  end
+
+  def select_date(project)
+    (project.start_on..project.end_on).map do |date|
+      [date.strftime('%m月%d日'), date.strftime('%Y-%m-%d')]
     end
   end
 end

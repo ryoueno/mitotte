@@ -72,18 +72,39 @@ class TasksController < ApplicationController
   end
 
   def update_schedule
-    schedule_params.each do |schedule_id, time_sets|
-      tmp = []
-      time_sets[:time].each_value do |time_set|
-        if time_set[:start_at].present? and time_set[:end_at].present?
-          time_set[:end_at], time_set[:start_at] = time_set[:start_at], time_set[:end_at] if time_set[:start_at] > time_set[:end_at]
-          tmp.push({time_set[:start_at] => time_set[:end_at]})
+    Schedule.transaction do
+      # 更新
+      schedule_params.each do |schedule_id, time_sets|
+        tmp = []
+        time_sets[:time].each_value do |time_set|
+          if time_set[:start_at].present? && time_set[:end_at].present?
+            time_set[:end_at], time_set[:start_at] = time_set[:start_at], time_set[:end_at] if time_set[:start_at] > time_set[:end_at]
+            tmp.push({time_set[:start_at] => time_set[:end_at]})
+          end
+        end
+        if(tmp.empty?)
+          Schedule.find(schedule_id).destroy
+        else
+          Schedule.find(schedule_id).update(:time => tmp)
         end
       end
-      if(tmp.empty?)
-        Schedule.find(schedule_id).destroy
-      else
-        Schedule.find(schedule_id).update(:time => tmp)
+
+      # 新規登録
+      new_schedule_params.each do |tmp_id, time_sets|
+        tmp = []
+        time_sets[:time].each_value do |time_set|
+          if time_set[:start_at].present? && time_set[:end_at].present?
+            time_set[:end_at], time_set[:start_at] = time_set[:start_at], time_set[:end_at] if time_set[:start_at] > time_set[:end_at]
+            tmp.push({time_set[:start_at] => time_set[:end_at]})
+          end
+        end
+        if(tmp.present? && time_sets[:date].present?)
+          Schedule.create(
+            :task_id => @task.id,
+            :date => time_sets[:date],
+            :time => tmp,
+          )
+        end
       end
     end
     redirect_to task_path(@task), notice: "更新しました"
@@ -120,6 +141,10 @@ class TasksController < ApplicationController
 
     def schedule_params
       params.require(:schedules)
+    end
+
+    def new_schedule_params
+      params.require(:new_schedules)
     end
 
     def divide_schedule_date(project)
