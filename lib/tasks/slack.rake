@@ -40,7 +40,7 @@ namespace :slack do
         Resque.enqueue(SendToSlack, ENV['SLACK_PUBLIC_CHANNEL'], title + body)
       end
     rescue => e
-      Resque.enqueue(SendToSlack, ENV['SLACK_PUBLIC_CHANNEL'], "エラーが発生しました。 #{e}")
+      Resque.enqueue(SendToSlack, ENV['SLACK_ADMIN_CHANNEL'], "エラーが発生しました。 #{e}")
     end
   end
 end
