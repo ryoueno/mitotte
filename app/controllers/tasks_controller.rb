@@ -29,7 +29,6 @@ class TasksController < ApplicationController
   end
 
   # POST /tasks
-  # POST /tasks.json
   def create
     default_schedule_time = [{'08:00' => '21:00'}]
     @project = Project.where(:id => params[:project_id], :user_id => current_user.id).first
@@ -43,8 +42,7 @@ class TasksController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_to @project, notice: 'Task was successfully created.' }
-      format.json { render :show, status: :created, location: @task }
+      format.html { redirect_to @project, notice: '作成しました' }
     end
   end
 
@@ -115,7 +113,7 @@ class TasksController < ApplicationController
   def destroy
     @task.destroy
     respond_to do |format|
-      format.html { redirect_to project_tasks_url(@task.project), notice: 'Task was successfully destroyed.' }
+      format.html { redirect_to project_tasks_url(@task.project), notice: '削除しました' }
       format.json { head :no_content }
     end
   end
