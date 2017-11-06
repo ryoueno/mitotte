@@ -29,7 +29,6 @@ class TasksController < ApplicationController
   end
 
   # POST /tasks
-  # POST /tasks.json
   def create
     default_schedule_time = [{'08:00' => '21:00'}]
     @project = Project.where(:id => params[:project_id], :user_id => current_user.id).first
@@ -43,50 +42,77 @@ class TasksController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_to @project, notice: 'Task was successfully created.' }
-      format.json { render :show, status: :created, location: @task }
+      format.html { redirect_to @project, notice: '作成しました' }
     end
   end
 
   # PATCH/PUT /tasks/1
-  # PATCH/PUT /tasks/1.json
   def update
     respond_to do |format|
       begin
-        # タスクのステータスを変更 -> 記録
-        Task.transaction do
-          old_id = @task.status.id
-          @task.update!(task_params)
-          if !@task.status.id.eql?(old_id)
-            UserLog.create(
-              :user_id => current_user.id,
-              :object_id => @task.id,
-              :behavior => UserBehaviors::STATUS[:TASK_STATE_UPDATE],
-              :update_from => old_id,
-              :update_to => @task.status.id,
-              :meta => []
-            )
-          end
+        # アクティビティに更新情報を記録
+        old_id = @task.status.id
+        if !task_params[:status].eql?(old_id)
+          Activity.create(
+            :user_id => current_user.id,
+            :behavior_id => Behavior.find_by({:name => 'CHANGE_STATUS'}).id,
+            :target_id => @task.id,
+            :update_from => old_id,
+            :update_to => task_params[:status],
+            :meta => []
+          )
         end
-        format.html { redirect_to @task, notice: 'Task was successfully updated.' }
-        format.json { render :show, status: :ok, location: @task }
+        format.html { redirect_to @task, notice: 'ステータスを更新しました' }
       rescue => e
-        format.html { redirect_to @task, notice: 'Task was successfully updated.' }
-        format.json { render json: @task.errors, status: :unprocessable_entity }
+        format.html { redirect_to @task, notice: '更新に失敗しました' }
       end
     end
   end
 
   def update_schedule
-    schedule_params.each do |schedule_id, time_sets|
-      tmp = []
-      time_sets[:time].each_value do |time_set|
-        if time_set[:start_on].present? and time_set[:end_on].present?
-          time_set[:end_on], time_set[:start_on] = time_set[:start_on], time_set[:end_on] if time_set[:start_on] > time_set[:end_on]
-          tmp.push({time_set[:start_on] => time_set[:end_on]})
+    Schedule.transaction do
+      # 更新
+      schedule_params.each do |schedule_id, time_sets|
+        tmp = []
+        time_sets[:time].each_value do |time_set|
+          if time_set[:start_at].present? && time_set[:end_at].present?
+            time_set[:end_at], time_set[:start_at] = time_set[:start_at], time_set[:end_at] if time_set[:start_at] > time_set[:end_at]
+            tmp.push({time_set[:start_at] => time_set[:end_at]})
+          end
+        end
+        if(tmp.empty?)
+          Schedule.find(schedule_id).destroy
+        else
+          Schedule.find(schedule_id).update(:time => tmp)
         end
       end
-      Schedule.find(schedule_id).update(:time => tmp)
+
+      # 新規登録
+      new_schedule_params.each do |tmp_id, time_sets|
+        tmp = []
+        time_sets[:time].each_value do |time_set|
+          if time_set[:start_at].present? && time_set[:end_at].present?
+            time_set[:end_at], time_set[:start_at] = time_set[:start_at], time_set[:end_at] if time_set[:start_at] > time_set[:end_at]
+            tmp.push({time_set[:start_at] => time_set[:end_at]})
+          end
+        end
+        if(tmp.present? && time_sets[:date].present?)
+          Schedule.create(
+            :task_id => @task.id,
+            :date => time_sets[:date],
+            :time => tmp,
+          )
+        end
+
+      end
+
+      # アクティビティログに記録
+      Activity.create(
+        :user_id => current_user.id,
+        :behavior_id => Behavior.find_by({:name => 'CHANGE_SCHEDULE'}).id,
+        :target_id => @task.id,
+        :meta => []
+      )
     end
     redirect_to task_path(@task), notice: "更新しました"
   end
@@ -96,7 +122,7 @@ class TasksController < ApplicationController
   def destroy
     @task.destroy
     respond_to do |format|
-      format.html { redirect_to project_tasks_url(@task.project), notice: 'Task was successfully destroyed.' }
+      format.html { redirect_to project_tasks_url(@task.project), notice: '削除しました' }
       format.json { head :no_content }
     end
   end
@@ -122,6 +148,10 @@ class TasksController < ApplicationController
 
     def schedule_params
       params.require(:schedules)
+    end
+
+    def new_schedule_params
+      params.require(:new_schedules)
     end
 
     def divide_schedule_date(project)

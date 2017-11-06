@@ -1,19 +1,34 @@
 <h5>予定時刻の変更</h5>
 <%= form_tag(update_schedule_path(@task), :method => :put) do %>
   <% schedules.each do |schedule| %>
-  <b class="lime-text text-darken-1"><%= schedule.date.strftime("%-m月%-d日") %></b>
-  <table>
-    <% Schedule::TIME_TERMS.times do |i| %>
-      <tr>
-      <td>
-      <%= select_tag "schedules[#{schedule.id}][time][#{i}][start_at]", options_for_select(select_time, :selected => schedule.time[i]&.start_at&.strftime("%H:%M")), :prompt => "-- : --" %>
-      </td>
-      <td>
-      <%= select_tag "schedules[#{schedule.id}][time][#{i}][end_at]", options_for_select(select_time, :selected => schedule.time[i]&.end_at&.strftime("%H:%M")), :prompt => "-- : --" %>
-      </td>
-      </tr>
-    <% end %>
-  </table>
+    <b class="lime-text text-darken-1"><%= schedule.date.strftime("%-m月%-d日") %></b>
+    <table>
+      <% Schedule::TIME_TERMS.times do |i| %>
+        <tr>
+        <td>
+        <%= select_tag "schedules[#{schedule.id}][time][#{i}][start_at]", options_for_select(select_time, :selected => schedule.time[i]&.start_at&.strftime("%H:%M")), :prompt => "-- : --" %>
+        </td>
+        <td>
+        <%= select_tag "schedules[#{schedule.id}][time][#{i}][end_at]", options_for_select(select_time, :selected => schedule.time[i]&.end_at&.strftime("%H:%M")), :prompt => "-- : --" %>
+        </td>
+        </tr>
+      <% end %>
+    </table>
+  <% end %>
+  <% 3.times do |tmp_id| %>
+    <%= select_tag "new_schedules[#{tmp_id}][date]", options_for_select(select_date(@task.project)), :prompt => "日付を選択してください" %>
+    <table>
+      <% Schedule::TIME_TERMS.times do |i| %>
+        <tr>
+        <td>
+        <%= select_tag "new_schedules[#{tmp_id}][time][#{i}][start_at]", options_for_select(select_time), :prompt => "-- : --" %>
+        </td>
+        <td>
+        <%= select_tag "new_schedules[#{tmp_id}][time][#{i}][end_at]", options_for_select(select_time), :prompt => "-- : --" %>
+        </td>
+        </tr>
+      <% end %>
+    </table>
   <% end %>
   <div class="input-field col s12 right-align">
     <%= submit_tag "登録", :class => "waves-effect waves-light btn-large" %>

@@ -2,7 +2,13 @@
   <%= render 'shared/side' %>
 <% end %>
 <main>
-
+  <% flash.each do |key, value| %>
+    <div class="card light-blue accent-2">
+      <div class="card-content white-text">
+        <p><%= value %></p>
+      </div>
+    </div>
+  <% end %>
   <p class="lime-text text-darken-1"><%= @task.project.subject %></p>
   <h4><%= @task.subject %></h4>
   <p class="lime-text text-darken-1"><%= @task.description %></p>
@@ -56,7 +62,7 @@
         <label>ステータス</label>
       </div>
       <div class="input-field col s12 right-align">
-        <%= f.submit "登録", :class => "waves-effect waves-light btn-large" %>
+        <%= f.submit "ステータスを更新", :class => "waves-effect waves-light btn-large" %>
       </div>
     <% end %>
   </div>

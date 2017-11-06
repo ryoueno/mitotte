@@ -4,6 +4,13 @@
 <script src="/js/monitoring.js" type="text/javascript" charset="utf-8" async defer></script>
 
 <main>
+  <% flash.each do |key, value| %>
+    <div class="card light-blue accent-2">
+      <div class="card-content white-text">
+        <p><%= value %></p>
+      </div>
+    </div>
+  <% end %>
   <div id="fb-activity"></div>
   <div class="row">
     <div class="main-box">
