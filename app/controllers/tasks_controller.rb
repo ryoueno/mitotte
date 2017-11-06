@@ -103,7 +103,16 @@ class TasksController < ApplicationController
             :time => tmp,
           )
         end
+
       end
+
+      # アクティビティログに記録
+      Activity.create(
+        :user_id => current_user.id,
+        :behavior_id => Behavior.find_by({:name => 'CHANGE_SCHEDULE'}).id,
+        :target_id => @task.id,
+        :meta => []
+      )
     end
     redirect_to task_path(@task), notice: "更新しました"
   end
