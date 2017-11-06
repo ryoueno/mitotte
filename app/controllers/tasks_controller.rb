@@ -49,30 +49,24 @@ class TasksController < ApplicationController
   end
 
   # PATCH/PUT /tasks/1
-  # PATCH/PUT /tasks/1.json
   def update
     respond_to do |format|
       begin
-        # タスクのステータスを変更 -> 記録
-        Task.transaction do
-          old_id = @task.status.id
-          @task.update!(task_params)
-          if !@task.status.id.eql?(old_id)
-            UserLog.create(
-              :user_id => current_user.id,
-              :object_id => @task.id,
-              :behavior => UserBehaviors::STATUS[:TASK_STATE_UPDATE],
-              :update_from => old_id,
-              :update_to => @task.status.id,
-              :meta => []
-            )
-          end
+        # アクティビティに更新情報を記録
+        old_id = @task.status.id
+        if !task_params[:status].eql?(old_id)
+          Activity.create(
+            :user_id => current_user.id,
+            :behavior_id => Behavior.find_by({:name => 'CHANGE_STATUS'}).id,
+            :target_id => @task.id,
+            :update_from => old_id,
+            :update_to => task_params[:status],
+            :meta => []
+          )
         end
-        format.html { redirect_to @task, notice: 'Task was successfully updated.' }
-        format.json { render :show, status: :ok, location: @task }
+        format.html { redirect_to @task, notice: 'ステータスを更新しました' }
       rescue => e
-        format.html { redirect_to @task, notice: 'Task was successfully updated.' }
-        format.json { render json: @task.errors, status: :unprocessable_entity }
+        format.html { redirect_to @task, notice: '更新に失敗しました' }
       end
     end
   end
@@ -86,7 +80,11 @@ class TasksController < ApplicationController
           tmp.push({time_set[:start_on] => time_set[:end_on]})
         end
       end
-      Schedule.find(schedule_id).update(:time => tmp)
+      if(tmp.empty?)
+        Schedule.find(schedule_id).destroy
+      else
+        Schedule.find(schedule_id).update(:time => tmp)
+      end
     end
     redirect_to task_path(@task), notice: "更新しました"
   end
