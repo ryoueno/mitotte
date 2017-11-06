@@ -25,19 +25,19 @@ end
 Behavior.seed do |s|
   s.name = 'RUNNING'
   s.display = '動作中'
-  s.color_code = 'f4ff81'
+  s.color_code = 'eeff41'
   s.priority = 5
 end
 Behavior.seed do |s|
   s.name = 'CHANGE_STATUS'
   s.display = 'ステータス変更'
-  s.color_code = 'ccccff'
+  s.color_code = 'eeff41'
   s.priority = 3
 end
 Behavior.seed do |s|
   s.name = 'CHANGE_SCHEDULE'
   s.display = '予定変更'
-  s.color_code = 'ccccff'
+  s.color_code = 'eeff41'
   s.priority = 4
 end
 Behavior.seed do |s|
