@@ -107,11 +107,11 @@ module ActivityHelper
     img = Magick::Image.read(save_path).first
 
     # 現在時点アイコン追加
-    icon = Magick::Image.read('public/images/dogs/dog_icon.png').first
-    icon.resize!(60, 40)
+    # icon = Magick::Image.read('public/images/dogs/dog_icon.png').first
+    # icon.resize!(60, 40)
     img = img.crop(Magick::SouthEastGravity, 680, 450)
-    graph_width = 680 #推定ベース画像サイズ
-    img.composite!(icon, progress_label.now_position * graph_width / progress_label.max_period, 300, Magick::OverCompositeOp)
+    # graph_width = 680 #推定ベース画像サイズ
+    # img.composite!(icon, progress_label.now_position * graph_width / progress_label.max_period, 300, Magick::OverCompositeOp)
 
     # 追加描画
     img.write(save_path)
