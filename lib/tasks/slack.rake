@@ -18,7 +18,8 @@ namespace :slack do
       users = User.all
       users.each do |user|
         activities = user.activities.aggregate(user.id, the_day)
-        activity_logs = Activity.where("user_id = ? and behavior_id in (?)", user.id, log_behavior_ids).limit(log_limit)
+        ActivityHelper.generate_activity_table(activities, the_day, user.projects.first)
+        activity_logs = Activity.where("user_id = ? and behavior_id in (?) and DATE(created_at) = ?", user.id, log_behavior_ids, the_day).limit(log_limit)
 
         title = "#{user.name}(@#{user.slack_name}) さんの#{the_day.strftime('%m月%d日')}の作業状況\n"
 
