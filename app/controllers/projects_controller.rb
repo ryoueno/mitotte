@@ -7,7 +7,7 @@ class ProjectsController < ApplicationController
   def index
     @projects = Project.where(user_id: current_user.id)
     if @projects.empty?
-      redirect_to ({:action => 'new'}), notice: "You have no project. Let's create!"
+      redirect_to ({:action => 'new'}), notice: "プロジェクトを作成しましょう"
     end
   end
 
@@ -34,7 +34,7 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if @project.save
-        format.html { redirect_to @project, notice: 'Project was successfully created.' }
+        format.html { redirect_to @project, notice: 'プロジェクトを作成しました' }
         format.json { render :show, status: :created, location: @project }
       else
         format.html { render :new }
@@ -48,7 +48,7 @@ class ProjectsController < ApplicationController
   def update
     respond_to do |format|
       if @project.update(project_params)
-        format.html { redirect_to @project, notice: 'Project was successfully updated.' }
+        format.html { redirect_to @project, notice: 'プロジェクトを更新しました' }
         format.json { render :show, status: :ok, location: @project }
       else
         format.html { render :edit }
@@ -62,7 +62,7 @@ class ProjectsController < ApplicationController
   def destroy
     @project.destroy
     respond_to do |format|
-      format.html { redirect_to projects_url, notice: 'Project was successfully destroyed.' }
+      format.html { redirect_to projects_url, notice: 'プロジェクトを削除しました' }
       format.json { head :no_content }
     end
   end
@@ -75,6 +75,6 @@ class ProjectsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def project_params
-      params.require(:project).permit(:user_id, :subject, :description, :start_at, :end_at)
+      params.require(:project).permit(:user_id, :subject, :description, :start_on, :end_on)
     end
 end
