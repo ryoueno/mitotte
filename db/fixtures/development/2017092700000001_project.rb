@@ -1,4 +1,4 @@
-15.times do |i|
+9.times do |i|
   Project.seed do |s|
     rand_str = Faker::Pokemon.unique.location
     s.user_id = i / 3 + 1

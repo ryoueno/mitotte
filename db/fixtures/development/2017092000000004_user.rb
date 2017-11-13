@@ -6,7 +6,7 @@ User.seed do |s|
   s.password = "secret"
 end
 
-50.times do |i|
+2.times do |i|
   User.seed do |s|
     s.name = Faker::Name.unique.name
     s.email = Faker::Internet.unique.email
