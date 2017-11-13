@@ -16,3 +16,7 @@ end
 every 1.day, :at => '8:00 am' do
   rake "slack:send_result", :environment => :production
 end
+
+every 30.minute do
+  rake "slack:notification", :environment => :production
+end
