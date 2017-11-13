@@ -7,5 +7,17 @@ RSpec.describe User, type: :model do
     it { expect(@user.name).to be_a_kind_of(String) }
     it { expect(@user.email).to be_a_kind_of(String) }
   end
-  it 'set keyword before save'
+
+  context 'make a judgement' do
+    before { @user = User.first }
+    context 'in consideration of task status' do
+      it { expect(@user.todo_at?(ignore_schedule: true)).to eq true }
+    end
+    context 'in consideration of schedules' do
+      it { expect(@user.todo_at?(ignore_status: true)).to eq true }
+    end
+    context 'in consideration of both task and schedules' do
+      it { expect(@user.todo_at?).to eq true }
+    end
+  end
 end

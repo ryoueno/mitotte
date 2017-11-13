@@ -20,6 +20,19 @@ class User < ApplicationRecord
     @@keywords
   end
 
+  def todo_at?(date: nil, time: nil, ignore_status: false, ignore_schedule: false)
+    date ||= Date.today
+    time ||= Tod::TimeOfDay(Time.now)
+    self.projects.each do |p|
+      return true if p.todo_at?(date: date, time: time, ignore_status: ignore_status, ignore_schedule: ignore_schedule)
+    end
+    return false
+  end
+
+  def todo_tasks(date: nil, time: nil, ignore_status: false, ignore_schedule: false)
+    self.projects.map {|p| p.todo_tasks(date: date, time: time, ignore_status: ignore_status, ignore_schedule: ignore_schedule)}.flatten
+  end
+
   @@keywords = [
     "あーもんど",
     "あぶら",
