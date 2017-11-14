@@ -21,7 +21,7 @@ module ActivityHelper
     dr.stroke_width(1)
     c_num_w.times do |hour|
       c_num_h.times do |minute|
-        if activities[sprintf("%02d:%02d", hour + 1, minute * 10)]
+        if activities[sprintf("%02d:%02d", hour + 1, minute * 10)] && activities[sprintf("%02d:%02d", hour + 1, minute * 10)].behavior
           dr.fill('#' + activities[sprintf("%02d:%02d", hour + 1, minute * 10)].behavior.color_code)
         elsif project.todo_at?(date: date, time: Tod::TimeOfDay.new(hour, minute))
           #TODO
