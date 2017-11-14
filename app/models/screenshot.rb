@@ -1,5 +1,6 @@
 class Screenshot < ApplicationRecord
   has_many :detections
+  belongs_to :user, primary_key: 'uuid', foreign_key: 'uuid'
 
   # 類似画像を探す範囲(分)
   TIME_TO_TRACE = 5
@@ -22,8 +23,8 @@ class Screenshot < ApplicationRecord
 
   def error_per_pixel
     if self.recent
-      img1 = Magick::Image.read(Rails.root.join(App::Application.config.screenshots_path, "test", self.name)).first
-      img2 = Magick::Image.read(Rails.root.join(App::Application.config.screenshots_path, "test", self.recent.name)).first
+      img1 = Magick::Image.read(Rails.root.join(App::Application.config.screenshots_path, self.name)).first
+      img2 = Magick::Image.read(Rails.root.join(App::Application.config.screenshots_path, self.recent.name)).first
       return img1.difference(img2)[0]
     end
     false

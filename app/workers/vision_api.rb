@@ -51,5 +51,8 @@ class VisionApi
 
     detection.save
 
+    # 不正があればアクティビティに記録
+    Activity.interpret(detection)
+
   end
 end
