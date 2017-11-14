@@ -9,7 +9,7 @@ namespace :slack do
       logs = ['CHANGE_STATUS', 'CHANGE_SCHEDULE', 'WORKING', 'LAZY']
 
       # ログに出力する件数
-      log_limit = 5
+      log_limit = 10
 
       # 昨日の作業状況を送信
       the_day = Date.yesterday
@@ -32,9 +32,15 @@ namespace :slack do
         end
 
         # アクティビティログがあれば本文に追加
-        if(activity_logs.present?)
-          log_thread = activity_logs.map do |activity|
-            "\n#{activity.created_at.strftime('%H:%M')} #{activity.display}\n -----------------------------------------------------------"
+        if (activity_logs.present?)
+          log_thread = []
+          tmp_text = ''
+          # 重複を除去
+          activity_logs.each do |activity|
+            if (tmp_text != activity.display)
+              log_thread.push("\n#{activity.created_at.strftime('%H:%M')} #{activity.display}\n -----------------------------------------------------------")
+            end
+            tmp_text = activity.display
           end
           body += log_thread.join
         end
