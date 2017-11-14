@@ -11,6 +11,11 @@ class ApplicationController < ActionController::Base
     if params[:uuid].present?
       cookies[:uuid] = params[:uuid]
     end
+
+    if cookies[:uuid].present? && current_user
+      current_user.uuid = cookies[:uuid]
+      current_user.save!
+    end
   end
 
   def check_uuid
