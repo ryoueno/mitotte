@@ -9,4 +9,6 @@
 * `sudo rails s -e production -p 80` で本番環境起動
 * `sudo lsof -i tcp:80 -t` でポート確認して `sudo kill [num]` すればserver止めれる
 
+* `rails db:seed_fu FILTER=2017111400000003_positive_word.rb` 特定のseederファイル実行
+
 * `sudo RAILS_ENV=production bin/resque start` 本番用

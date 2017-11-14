@@ -1,5 +1,6 @@
 class Screenshot < ApplicationRecord
   has_many :detections
+  belongs_to :user, primary_key: 'uuid', foreign_key: 'uuid'
 
   # 類似画像を探す範囲(分)
   TIME_TO_TRACE = 5
