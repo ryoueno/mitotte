@@ -44,7 +44,11 @@ class Activity < ApplicationRecord
     when 'MOVING'
       'アプリケーションの操作中です'
     when 'LAZY'
-      'サボっているみたいです'
+      if (self.meta['message'].present? && self.meta['info'])
+        "#{self.meta['message']}\n => #{self.meta['info'].join(', ')}"
+      else
+        'サボっているみたいです'
+      end
     when 'RUNNING'
       'アプリケーションが作動中です'
     when 'CHANGE_STATUS'
@@ -55,6 +59,47 @@ class Activity < ApplicationRecord
       task.nil? ? "予定が変更されました" : "#{task.subject}の予定が変更されました"
     else
       '不明な動作が検出されました'
+    end
+  end
+
+  def self.interpret(detection)
+    user = detection.screenshot.user
+
+    meta = case detection.mode
+    when 'LOGO_DETECTION'
+      {
+        'message' => 'あやしい動きを検知しました [LOGO_DETECTION]',
+        'info' => detection.keywords,
+      }
+
+    when 'SAFE_SEARCH_DETECTION'
+      if (detection.keywords['adult'] != 'VERY_UNLIKELY' && detection.keywords['adult'] != 'UNLIKELY')
+        {
+          'message' => '高揚している可能性があります',
+          'info' => ['adult', detection.keywords['adult']],
+        }
+      end
+    when 'LABEL_DETECTION'
+      # 無効なキーワードを抽出
+      positive_words = PositiveWord.pluck('display')
+      invalid_words = detection.keywords - positive_words
+
+      # 3つ以上含んだらアラート
+      if (invalid_words.length >= 3)
+        {
+          'message' => 'あやしい動きを検知しました [LABEL_DETECTION]',
+          'info' => invalid_words,
+        }
+      end
+
+    end
+
+    if (meta.present? && meta['message'].present? && meta['info'].present?)
+      self.create(
+        :user_id => user.id,
+        :behavior_id => Behavior.find_by({:name => 'LAZY'}).id,
+        :meta => meta,
+      )
     end
   end
 end

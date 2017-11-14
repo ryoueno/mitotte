@@ -1,0 +1,2 @@
+class PositiveWord < ApplicationRecord
+end

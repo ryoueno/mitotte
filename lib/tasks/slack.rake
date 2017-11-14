@@ -6,7 +6,7 @@ namespace :slack do
     include ActivityHelper
     begin
       # アクティビティログに出力するもの
-      logs = ['CHANGE_STATUS', 'CHANGE_SCHEDULE', 'WORKING']
+      logs = ['CHANGE_STATUS', 'CHANGE_SCHEDULE', 'WORKING', 'LAZY']
 
       # ログに出力する件数
       log_limit = 5
