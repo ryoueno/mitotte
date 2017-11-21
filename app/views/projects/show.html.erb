@@ -40,7 +40,7 @@
         <td>
           <h5>残りのタスク数</h5>
           <span class="lime-text text-darken-1">
-            <%= @project.todo_tasks.count %>
+            <%= @project.todo_tasks(ignore_schedule: true).count %>
           </span>
         </td>
       </tr>
