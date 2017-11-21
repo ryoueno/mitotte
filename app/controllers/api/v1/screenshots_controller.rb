@@ -21,15 +21,13 @@ class Api::V1::ScreenshotsController < ApplicationController
 
     if @screenshot.save
       # Create job detect information from screenshot by using Cloud Vision API.
-      if not @screenshot.similar?
-        api_key = ENV['GOOGLE_API_KEY']
-        api_url = ENV['GOOGLE_CLOUD_VISION_API_URL']
-        url = "#{api_url}?key=#{api_key}"
-        types = ["LOGO_DETECTION", "LABEL_DETECTION", "TEXT_DETECTION", "SAFE_SEARCH_DETECTION"]
+      api_key = ENV['GOOGLE_API_KEY']
+      api_url = ENV['GOOGLE_CLOUD_VISION_API_URL']
+      url = "#{api_url}?key=#{api_key}"
+      types = ["LOGO_DETECTION", "LABEL_DETECTION", "SAFE_SEARCH_DETECTION"]
 
-        types.each do |type|
-          Resque.enqueue(VisionApi, url, type, @screenshot.id, @screenshot.path)
-        end
+      types.each do |type|
+        Resque.enqueue(VisionApi, url, type, @screenshot.id, @screenshot.path)
       end
 
       behavior = @screenshot.similar? ? "NOT_MOVING" : "MOVING"
