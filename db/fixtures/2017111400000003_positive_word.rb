@@ -7,6 +7,7 @@ words = [
   'technology',
   'product',
   'screenshot',
+  'black',
 ]
 
 words.each do |word|
