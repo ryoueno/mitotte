@@ -46,3 +46,9 @@ Behavior.seed do |s|
   s.color_code = 'f4ff81'
   s.priority = 15
 end
+Behavior.seed do |s|
+  s.name = 'ANSWERED'
+  s.display = 'アンケートに回答'
+  s.color_code = 'eeff41'
+  s.priority = 2
+end

@@ -3,6 +3,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable and :omniauthable
   has_many :projects
   has_many :activities
+  has_many :user_questionnaires
   has_many :screenshots, primary_key: 'uuid', foreign_key: 'uuid'
   before_save :set_keyword
   devise :database_authenticatable, :registerable,

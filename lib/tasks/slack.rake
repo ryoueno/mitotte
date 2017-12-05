@@ -9,7 +9,7 @@ namespace :slack do
       logs = ['CHANGE_STATUS', 'CHANGE_SCHEDULE', 'WORKING', 'LAZY']
 
       # ログに出力する件数
-      log_limit = 10
+      log_limit = 50
 
       # 昨日の作業状況を送信
       the_day = Date.yesterday

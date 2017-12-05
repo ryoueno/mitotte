@@ -57,6 +57,8 @@ class Activity < ApplicationRecord
       status_from.nil? or status_to.nil? or task.nil? ? "作業のステータスが更新されました" : "#{task.subject}のステータスが「#{status_from.display}」から「#{status_to.display}」に更新されました"
     when 'CHANGE_SCHEDULE'
       task.nil? ? "予定が変更されました" : "#{task.subject}の予定が変更されました"
+    when 'ANSWERED'
+      'アンケートに回答しました'
     else
       '不明な動作が検出されました'
     end
