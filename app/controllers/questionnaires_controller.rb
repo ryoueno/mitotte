@@ -34,6 +34,14 @@ class QuestionnairesController < ApplicationController
         )
         answer.save!
       end
+
+      # アクティビティログに記録
+      Activity.create(
+        :user_id => current_user.id,
+        :behavior_id => Behavior.find_by({:name => 'ANSWERED'}).id,
+        :meta => []
+      )
+
       format.html { redirect_to questionnaires_path, notice: 'アンケートに回答しました' }
     end
   end
