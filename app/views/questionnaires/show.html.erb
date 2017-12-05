@@ -1,0 +1,35 @@
+<% content_for :sidebar do %>
+  <%= render 'shared/side' %>
+<% end %>
+<main>
+  <% flash.each do |key, value| %>
+    <div class="card light-blue accent-2">
+      <div class="card-content white-text">
+        <p><%= value %></p>
+      </div>
+    </div>
+  <% end %>
+  <h5>mitotteアプリケーションに関するアンケート</h5>
+  <hr>
+  <div class="row">
+    <%= form_tag questionnaires_path, :method => :put do %>
+      <% @questionnaires.each do |questionnaire| %>
+        <% user_questionnaire = @user_questionnaires.find_by(questionnaire: questionnaire.id) %>
+        <p><%= "#{questionnaire.id}. #{questionnaire.display}" %></p>
+        <% if questionnaire.options %>
+          <% questionnaire.options.each do |idx, option| %>
+            <p>
+              <input name="answer[<%= questionnaire.id %>]" type="radio" id="answer<%= questionnaire.id %>-<%= idx %>" value="<%= idx %>" <%= user_questionnaire&.answer&.to_i == idx.to_i ? 'checked="checked"' : '' %> >
+              <label for="answer<%= questionnaire.id %>-<%= idx %>"><%= option %></label>
+            </p>
+          <% end %>
+        <% else %>
+          <textarea name="answer[<%= questionnaire.id %>]" id="answer<%= questionnaire.id %>" class="materialize-textarea"><%= user_questionnaire&.answer %></textarea>
+        <% end %>
+      <% end %>
+      <div class="actions center-align">
+        <%= submit_tag @user_questionnaires.empty? ? '回答する' : '回答を更新する', :class => "waves-effect waves-light btn-large" %>
+      </div>
+    <% end %>
+  </div>
+</main>
