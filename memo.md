@@ -12,3 +12,6 @@
 * `rails db:seed_fu FILTER=2017111400000003_positive_word.rb` 特定のseederファイル実行
 
 * `sudo RAILS_ENV=production bin/resque start` 本番用
+
+* `bundle exec rake slack:send_result` 報告
+* `sudo RAILS_ENV=production bundle exec rake slack:send_result` 報告

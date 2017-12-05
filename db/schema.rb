@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171114021405) do
+ActiveRecord::Schema.define(version: 20171204033146) do
 
   create_table "activities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -63,6 +63,12 @@ ActiveRecord::Schema.define(version: 20171114021405) do
     t.index ["user_id"], name: "index_projects_on_user_id", using: :btree
   end
 
+  create_table "questionnaires", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.text   "display",  limit: 65535
+    t.string "category"
+    t.json   "options"
+  end
+
   create_table "schedules", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "task_id"
     t.date     "date"
@@ -94,6 +100,14 @@ ActiveRecord::Schema.define(version: 20171114021405) do
     t.index ["project_id"], name: "index_tasks_on_project_id", using: :btree
   end
 
+  create_table "user_questionnaires", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "user_id"
+    t.integer "questionnaire_id"
+    t.text    "answer",           limit: 65535
+    t.index ["questionnaire_id"], name: "index_user_questionnaires_on_questionnaire_id", using: :btree
+    t.index ["user_id"], name: "index_user_questionnaires_on_user_id", using: :btree
+  end
+
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name",                                null: false
     t.string   "email",                  default: "", null: false
@@ -119,4 +133,6 @@ ActiveRecord::Schema.define(version: 20171114021405) do
   add_foreign_key "activities", "users"
   add_foreign_key "projects", "users"
   add_foreign_key "tasks", "projects"
+  add_foreign_key "user_questionnaires", "questionnaires"
+  add_foreign_key "user_questionnaires", "users"
 end
